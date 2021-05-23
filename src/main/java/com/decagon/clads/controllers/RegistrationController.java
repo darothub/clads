@@ -30,6 +30,7 @@ public class RegistrationController {
         registrationService.confirmToken(token);
         return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
     }
+
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         successResponse.setMessage(message);
         successResponse.setStatus(status.value());
