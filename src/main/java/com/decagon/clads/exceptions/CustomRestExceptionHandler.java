@@ -2,6 +2,7 @@ package com.decagon.clads.exceptions;
 
 
 import com.decagon.clads.model.response.ErrorResponse;
+import com.decagon.clads.model.response.ResponseModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Slf4j
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private ResponseModel responseModel;
     private ErrorResponse error;
 
 
@@ -62,9 +64,19 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFound(
             EntityNotFoundException ex) {
+
         error.setMessage(NOT_FOUND.toString());
         error.setStatus(NOT_FOUND.value());
         error.setError(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
+        return buildResponseEntity(error);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    protected ResponseEntity<Object> handleIllegalStateException(
+            IllegalStateException ex) {
+        error.setMessage(ex.getMessage());
+        error.setStatus(BAD_REQUEST.value());
+        error.setError(ex.getLocalizedMessage());
         return buildResponseEntity(error);
     }
 

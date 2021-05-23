@@ -14,4 +14,5 @@ import org.springframework.stereotype.Component;
 public class ResponseModel {
     private int status;
     private String message;
+
 }
