@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ConfirmationTokenService {
 
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
 
     public void saveConfirmationToken(ConfirmationToken confirmationToken){
         confirmationTokenRepository.save(confirmationToken);

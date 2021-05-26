@@ -3,6 +3,7 @@ package com.decagon.clads.services;
 import com.decagon.clads.entities.Artisan;
 import com.decagon.clads.entities.token.ConfirmationToken;
 import com.decagon.clads.exceptions.CustomException;
+import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
@@ -32,6 +33,7 @@ public class ArtisanService implements UserDetailsService {
     private final ArtisanRepository artisanRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JWTUtility jwtUtility;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -51,7 +53,7 @@ public class ArtisanService implements UserDetailsService {
             String encodedPassword = bCryptPasswordEncoder.encode(artisan.getPassword());
             artisan.setPassword(encodedPassword);
             Artisan newArtisan = artisanRepository.save(artisan);
-            String token = UUID.randomUUID().toString();
+            String token = jwtUtility.generateToken(newArtisan);
             ConfirmationToken confirmationToken = new ConfirmationToken(
                     token,
                     LocalDateTime.now(),
@@ -63,7 +65,7 @@ public class ArtisanService implements UserDetailsService {
             return token;
         }
         else if (!artisanExists.get().getEnabled()){
-            String token = UUID.randomUUID().toString();
+            String token = jwtUtility.generateToken(artisanExists.get());
             ConfirmationToken confirmationToken = new ConfirmationToken(
                     token,
                     LocalDateTime.now(),

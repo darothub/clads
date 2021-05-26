@@ -15,12 +15,12 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "/api/v1/artisans")
+@RequestMapping(path = "/api/v1")
 public class RegistrationController {
     private final RegistrationService registrationService;
     private final SuccessResponse successResponse;
 
-    @PostMapping
+    @PostMapping("/artisans")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
         ArtisanDTO artisanAdded = registrationService.register(artisan);
         return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, artisanAdded);
@@ -30,7 +30,10 @@ public class RegistrationController {
         registrationService.confirmToken(token);
         return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
     }
-
+    @GetMapping(path = "/profile")
+    public ResponseEntity<ResponseModel> Hello() {
+        return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
+    }
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         successResponse.setMessage(message);
         successResponse.setStatus(status.value());
@@ -38,3 +41,5 @@ public class RegistrationController {
         return new ResponseEntity<>(successResponse, status);
     }
 }
+
+

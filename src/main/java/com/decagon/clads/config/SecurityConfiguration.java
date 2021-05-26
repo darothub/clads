@@ -1,5 +1,6 @@
 package com.decagon.clads.config;
 
+import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.services.ArtisanService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @AllArgsConstructor
 @Configuration
@@ -20,6 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final ArtisanService artisanService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtFilter jwtFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -44,14 +47,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/v*/artisans/**")
+                .antMatchers("/api/v*/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -22,13 +22,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Data
 @AllArgsConstructor
@@ -89,7 +89,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<Object> handleNoSuchElement(Exception ex) {
+
         return errorHandlerController(ex, NOT_FOUND);
+    }
+
+    @ExceptionHandler({UnknownHostException.class})
+    public ResponseEntity<Object> handleUnknownHostException(UnknownHostException ex) {
+        return errorHandlerController(ex, INTERNAL_SERVER_ERROR);
     }
 
 
@@ -133,7 +139,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> errorHandlerController(Exception ex, HttpStatus status) {
         error.setMessage(status.toString());
         error.setStatus(status.value());
-        error.setError(ex.getMessage());
+        error.setError(ex.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.valueOf(error.getStatus()));
     }
 }

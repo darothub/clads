@@ -26,7 +26,7 @@ public class RegistrationService {
 
     public ArtisanDTO register(Artisan artisan) {
         String token = artisanService.signUpArtisan(artisan);
-        String link = String.format("http://localhost:8080/api/v1/artisans/confirm?token=%s", token);
+        String link = String.format("http://localhost:8080/api/v1/confirm?token=%s", token);
         ArtisanDTO artisanDTO = modelMapper.map(artisan, ArtisanDTO.class);
         emailSender.send(artisanDTO.getEmail(), buildEmail(artisanDTO.getFirstName(), link));
        return artisanDTO;
@@ -47,7 +47,7 @@ public class RegistrationService {
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new IllegalStateException("token expired");
+            throw new IllegalStateException("link has expired");
         }
 
         confirmationTokenService.setConfirmedAt(token);
