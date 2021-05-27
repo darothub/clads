@@ -1,4 +1,4 @@
-package com.decagon.clads.entities;
+package com.decagon.clads.entities.artisan;
 
 import com.decagon.clads.utils.ConstantUtils;
 import com.sun.istack.NotNull;
@@ -23,6 +23,7 @@ import java.util.Collections;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@IdClass(ArtisanId.class)
 public class Artisan implements UserDetails {
     @Id
     @SequenceGenerator(name = "artisan_sequence", sequenceName = "artisan_sequence", allocationSize=1)
@@ -34,6 +35,7 @@ public class Artisan implements UserDetails {
     @NotNull
     @NotBlank
     private String lastName;
+    private String otherName;
     @NotNull
     @NotBlank
     @Pattern(regexp = ConstantUtils.CATEGORY_PATTERN, message = "Invalid category")
@@ -42,6 +44,7 @@ public class Artisan implements UserDetails {
     private String password;
     @Pattern(regexp = ConstantUtils.IMAGE_PATTERN, message = "Invalid image")
     private String thumbnail;
+    @Id
     @Email
     @NotBlank
     @NotNull
@@ -51,8 +54,16 @@ public class Artisan implements UserDetails {
     @Pattern(regexp = ConstantUtils.GENDER_PATTERN, message = "Invalid gender type")
     private String gender;
     private String country;
-    private Boolean enabled = false;
-    private Boolean locked = false;
+    @OneToOne
+    private Address workshopAddress;
+    @OneToOne
+    private Address showroomAddress;
+    private int noOfEmployees;
+    @OneToOne(mappedBy = "artisan", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Association union;
+    private boolean enabled = false;
+    private boolean locked = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -95,4 +106,5 @@ public class Artisan implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
 }

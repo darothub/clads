@@ -1,6 +1,6 @@
 package com.decagon.clads.controllers;
 
-import com.decagon.clads.entities.Artisan;
+import com.decagon.clads.entities.artisan.Artisan;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.model.response.SuccessResponse;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @RequestMapping(path = "/api/v1")
 public class RegistrationController {
     private final RegistrationService registrationService;
-    private final SuccessResponse successResponse;
+    private final SuccessResponseHandler successResponseHandler;
 
     @PostMapping("/artisans")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
@@ -30,15 +30,14 @@ public class RegistrationController {
         registrationService.confirmToken(token);
         return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
     }
+
+
     @GetMapping(path = "/profile")
     public ResponseEntity<ResponseModel> Hello() {
         return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
     }
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
-        successResponse.setMessage(message);
-        successResponse.setStatus(status.value());
-        successResponse.setPayload(payload);
-        return new ResponseEntity<>(successResponse, status);
+        return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
     }
 }
 

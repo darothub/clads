@@ -103,6 +103,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Pattern.compile("/api/v1/(artisans|confirm)").matcher(path).matches();
+        return Pattern.compile("/api/v1/(artisans|confirm|login)").matcher(path).matches();
     }
 }

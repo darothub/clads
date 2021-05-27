@@ -1,9 +1,9 @@
 package com.decagon.clads.model.dto;
 
+import com.decagon.clads.entities.artisan.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @NoArgsConstructor
