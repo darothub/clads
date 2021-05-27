@@ -6,6 +6,7 @@ import com.decagon.clads.model.response.ResponseModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,18 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex) {
         return errorHandlerController(ex, BAD_REQUEST);
+    }
+
+    @ExceptionHandler({SQLGrammarException.class})
+    public ResponseEntity<Object> handleSQLGrammarException(
+            SQLGrammarException ex) {
+        return errorHandlerController(ex, INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({SocketTimeoutException.class})
+    public ResponseEntity<Object> handleSocketTimeoutException(
+            SocketTimeoutException ex) {
+        return errorHandlerController(ex, INTERNAL_SERVER_ERROR);
     }
 
     @Override

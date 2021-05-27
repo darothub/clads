@@ -1,6 +1,6 @@
 package com.decagon.clads.repositories;
 
-import com.decagon.clads.entities.Artisan;
+import com.decagon.clads.entities.artisan.Artisan;
 import com.decagon.clads.entities.token.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

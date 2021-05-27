@@ -1,6 +1,6 @@
 package com.decagon.clads.entities.token;
 
-import com.decagon.clads.entities.Artisan;
+import com.decagon.clads.entities.artisan.Artisan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,10 +25,10 @@ public class ConfirmationToken {
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
     @ManyToOne
-    @JoinColumn(
-            nullable = false,
-            name = "artisan_id"
-    )
+    @JoinColumns({
+            @JoinColumn(name="artisan_id", referencedColumnName="id"),
+            @JoinColumn(name="artisan_email", referencedColumnName="email")
+    })
     private Artisan artisan;
 
     public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, Artisan artisan){

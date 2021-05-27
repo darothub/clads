@@ -1,16 +1,16 @@
 package com.decagon.clads.services;
 
-import com.decagon.clads.entities.Artisan;
+import com.decagon.clads.entities.artisan.Address;
+import com.decagon.clads.entities.artisan.Artisan;
+//import com.decagon.clads.entities.artisan.Union;
+import com.decagon.clads.entities.artisan.Association;
 import com.decagon.clads.entities.token.ConfirmationToken;
 import com.decagon.clads.exceptions.CustomException;
 import com.decagon.clads.jwt.JWTUtility;
-import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +32,7 @@ public class ArtisanService implements UserDetailsService {
 
     private final ArtisanRepository artisanRepository;
     private final ConfirmationTokenService confirmationTokenService;
+    private final AssociationService associationService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTUtility jwtUtility;
 
@@ -60,11 +61,12 @@ public class ArtisanService implements UserDetailsService {
                     LocalDateTime.now().plusMinutes(15),
                     newArtisan
             );
+
             log.info("ConfirmationToken {}", confirmationToken);
             confirmationTokenService.saveConfirmationToken(confirmationToken);
             return token;
         }
-        else if (!artisanExists.get().getEnabled()){
+        else if (!artisanExists.get().isEnabled()){
             String token = jwtUtility.generateToken(artisanExists.get());
             ConfirmationToken confirmationToken = new ConfirmationToken(
                     token,
