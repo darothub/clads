@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Repository
-@Transactional(readOnly = true)
-public interface AssociationRepository extends JpaRepository<Association, Long> {
-    @Transactional
-    @Modifying
-    @Query("SELECT a FROM Association a WHERE a.artisan = ?1")
-    Optional<Association> findByEmail(Artisan artisan);
-}
+//@Repository
+//@Transactional(readOnly = true)
+//public interface AssociationRepository extends JpaRepository<Association, Long> {
+//    @Transactional
+//    @Modifying
+//    @Query("SELECT a FROM Association a WHERE a.artisan = ?1")
+//    Optional<Association> findByEmail(Artisan artisan);
+//}

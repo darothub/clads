@@ -10,7 +10,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address implements Serializable {
+@Embeddable
+public class Address  {
     private String street ="";
     private String city ="";
     private String state="";

@@ -32,7 +32,7 @@ public class ArtisanService implements UserDetailsService {
 
     private final ArtisanRepository artisanRepository;
     private final ConfirmationTokenService confirmationTokenService;
-    private final AssociationService associationService;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTUtility jwtUtility;
 

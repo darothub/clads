@@ -36,6 +36,7 @@ public class ProfileService {
         Artisan artisan1 = artisanRepository.findByEmail(JwtFilter.userName)
                 .orElseThrow(()-> new CustomException(errorResponse));
         artisan.setPassword(artisan1.getPassword());
+        artisan.setEnabled(artisan1.isEnabled());
         artisanRepository.save(artisan);
         log.info("Artisan {}", artisan1);
         return getArtisanProfile();

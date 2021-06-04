@@ -55,12 +55,29 @@ public class Artisan implements UserDetails {
     @Pattern(regexp = ConstantUtils.GENDER_PATTERN, message = "Invalid gender type")
     private String gender;
     private String country;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride( name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride( name = "state", column = @Column(name = "work_state"))
+    })
     private Address workshopAddress = new Address();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "street", column = @Column(name = "show_room_street")),
+            @AttributeOverride( name = "city", column = @Column(name = "show_room_city")),
+            @AttributeOverride( name = "state", column = @Column(name = "show_room_state"))
+    })
     private Address showroomAddress = new Address();
     private int noOfEmployees;
-    @OneToOne(mappedBy = "artisan", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Association union;
+    @AttributeOverrides({
+            @AttributeOverride( name = "name", column = @Column(name = "assoc_name")),
+            @AttributeOverride( name = "ward", column = @Column(name = "assoc_ward")),
+            @AttributeOverride( name = "lga", column = @Column(name = "assoc_lga")),
+            @AttributeOverride( name = "state", column = @Column(name = "assoc_state"))
+    })
+    @Embedded
+    private Association union = new Association();
     private boolean enabled = false;
     private boolean locked = false;
     private String auth_provider = "regular";
