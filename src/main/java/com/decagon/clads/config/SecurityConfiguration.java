@@ -1,5 +1,6 @@
 package com.decagon.clads.config;
 
+import com.decagon.clads.filter.GoogleLoginFilter;
 import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.services.ArtisanService;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final ArtisanService artisanService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtFilter jwtFilter;
+    private final GoogleLoginFilter googleLoginFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -55,5 +57,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(googleLoginFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

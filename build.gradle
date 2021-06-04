@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation 'com.google.api-client:google-api-client:1.31.2'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'

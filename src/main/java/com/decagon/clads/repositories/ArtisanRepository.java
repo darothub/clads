@@ -19,5 +19,10 @@ public interface ArtisanRepository extends JpaRepository<Artisan, Long> {
     @Query("UPDATE Artisan a " +
             "SET a.enabled = TRUE WHERE a.email = ?1")
     int enableArtisan(String email);
+    @Transactional
+    @Modifying
+    @Query("UPDATE Artisan a " +
+            "SET a = ?1 WHERE a.email = ?2")
+    int updateArtisan(Artisan artisan, String email);
 
 }

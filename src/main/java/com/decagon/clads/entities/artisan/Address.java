@@ -5,28 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Address {
-    @Id
-    @SequenceGenerator(name = "address_sequence", sequenceName = "address_sequence", allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="address_sequence")
-    private Long id;
+public class Address implements Serializable {
     private String street ="";
     private String city ="";
     private String state="";
-//    @OneToOne
-//    @JoinColumns({
-//            @JoinColumn(name="artisan_id", referencedColumnName="id"),
-//            @JoinColumn(name="artisan_email", referencedColumnName="email")
-//    })
-//    private Artisan artisan;
-    private String type;
-
-    public Address(String type){
-        this.type = type;
-    }
 }

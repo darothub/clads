@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.internal.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,16 +55,15 @@ public class Artisan implements UserDetails {
     @Pattern(regexp = ConstantUtils.GENDER_PATTERN, message = "Invalid gender type")
     private String gender;
     private String country;
-    @OneToOne
-    private Address workshopAddress;
-    @OneToOne
-    private Address showroomAddress;
+    private Address workshopAddress = new Address();
+    private Address showroomAddress = new Address();
     private int noOfEmployees;
     @OneToOne(mappedBy = "artisan", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Association union;
     private boolean enabled = false;
     private boolean locked = false;
+    private String auth_provider = "regular";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
