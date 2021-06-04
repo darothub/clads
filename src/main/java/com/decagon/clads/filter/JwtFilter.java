@@ -72,25 +72,36 @@ public class JwtFilter extends OncePerRequestFilter {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
         }
-        if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-            log.info("token "+token + "\n");
+        try{
+            if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
+                log.info("token "+token + "\n");
 
-            UserDetails userDetails = artisanService.loadUserByUsername(userName);
-            log.info("UserDTO {}", userDetails);
-            if (jwtUtility.validateToken(token, userDetails)) {
-                log.info("token is valid");
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities()
-                        );
-                usernamePasswordAuthenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                UserDetails userDetails = artisanService.loadUserByUsername(userName);
+                log.info("UserDTO {}", userDetails);
+                if (jwtUtility.validateToken(token, userDetails)) {
+                    log.info("token is valid");
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities()
+                            );
+                    usernamePasswordAuthenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                }
+
             }
+            filterChain.doFilter(request, response);
 
         }
-        filterChain.doFilter(request, response);
+        catch (Exception e){
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), String.valueOf(HttpStatus.UNAUTHORIZED), "You are unauthorized");
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), error);
+        }
 
     }
 
