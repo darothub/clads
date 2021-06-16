@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.decagon'
 version = '0.0.1-ALPHA'
-sourceCompatibility = '11'
+sourceCompatibility = '1.8'
 
 configurations {
     compileOnly {
