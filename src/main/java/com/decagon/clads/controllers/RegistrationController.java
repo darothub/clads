@@ -21,6 +21,10 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private final SuccessResponseHandler successResponseHandler;
 
+    @GetMapping("/")
+    public ResponseEntity<Object> home() {
+        return ResponseEntity.ok("Welcome to Clads home");
+    }
     @PostMapping("/artisans/register")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
         String token = (String) registrationService.register(artisan).join();
