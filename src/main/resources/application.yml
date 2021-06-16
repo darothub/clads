@@ -4,9 +4,9 @@ server:
     include-message: always
 spring:
   datasource:
-    username: postgres
-    password: password
-    url: jdbc:postgresql://localhost:5432/clads
+    username:
+    password:
+    url: jdbc:postgres://vjqcknjshmjspf:25d1ec078692fde0891f10122456c41d2238bb241480d5fc8c8778aea0e7049b@ec2-54-158-232-223.compute-1.amazonaws.com:5432/dfdh75bjru3dts
 
   jpa:
     hibernate:
