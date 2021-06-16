@@ -1,6 +1,7 @@
 package com.decagon.clads.model.dto;
 
 import com.decagon.clads.entities.artisan.Address;
+import com.decagon.clads.entities.artisan.Association;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArtisanDTO {
+    private Long id;
     private String firstName;
     private String lastName;
     private String role;
@@ -17,4 +19,9 @@ public class ArtisanDTO {
     private String phoneNumber;
     private String gender;
     private String country;
+    private Address workshopAddress = new Address();
+    private Address showroomAddress = new Address();
+    private Association union;
+
+
 }

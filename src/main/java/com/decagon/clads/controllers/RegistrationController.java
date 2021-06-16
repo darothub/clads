@@ -5,6 +5,7 @@ import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.model.response.SuccessResponse;
 import com.decagon.clads.services.RegistrationService;
+import com.decagon.clads.utils.ConstantUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +16,15 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "/api/v1")
+@RequestMapping(path = ConstantUtils.BASE_URL)
 public class RegistrationController {
     private final RegistrationService registrationService;
     private final SuccessResponseHandler successResponseHandler;
 
-    @PostMapping("/artisans")
+    @PostMapping("/artisans/register")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
-        ArtisanDTO artisanAdded = registrationService.register(artisan);
-        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, artisanAdded);
+        String token = (String) registrationService.register(artisan).join();
+        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, token);
     }
     @GetMapping(path = "/confirm")
     public ResponseEntity<ResponseModel> confirm(@RequestParam("token") String token) {
@@ -32,10 +33,6 @@ public class RegistrationController {
     }
 
 
-    @GetMapping(path = "/profile")
-    public ResponseEntity<ResponseModel> Hello() {
-        return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
-    }
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
     }

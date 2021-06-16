@@ -4,7 +4,9 @@ import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.services.ArtisanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +26,20 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 @Data
+@NoArgsConstructor
 @Component
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-
     private JWTUtility jwtUtility;
 
     private ArtisanService artisanService;
+
+    @Autowired
+    public JwtFilter(JWTUtility jwtUtility, ArtisanService artisanService){
+        this.artisanService = artisanService;
+        this.jwtUtility = jwtUtility;
+    }
 
     public static String  token = null;
     public static String userName = null;
@@ -39,15 +47,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        log.info("jwt filter");
         String authorization = request.getHeader("Authorization");
-
 
         try{
             if (null != authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
                 userName = jwtUtility.getEmailAddressFromToken(token);
-                userId = jwtUtility.getIdFromToken(token);
             }
             else{
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -67,8 +73,8 @@ public class JwtFilter extends OncePerRequestFilter {
             mapper.writeValue(response.getOutputStream(), error);
         }
         try{
-            if (0 != userId && null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-                log.info("token "+token + "\n" + "userId " + userId);
+            if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
+                log.info("token "+token + "\n");
 
                 UserDetails userDetails = artisanService.loadUserByUsername(userName);
                 log.info("UserDTO {}", userDetails);
@@ -76,7 +82,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     log.info("token is valid");
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(
-                                    userDetails, null, userDetails.getAuthorities()
+                                    userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities()
                             );
                     usernamePasswordAuthenticationToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)
@@ -85,14 +91,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
 
             }
-
             filterChain.doFilter(request, response);
 
         }
         catch (Exception e){
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR), "Internal server error");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), String.valueOf(HttpStatus.UNAUTHORIZED), "You are unauthorized");
 
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
@@ -103,6 +108,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Pattern.compile("/api/v1/(artisans|confirm|login)").matcher(path).matches();
+        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google)").matcher(path).matches();
     }
 }
