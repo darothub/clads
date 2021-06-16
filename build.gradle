@@ -41,3 +41,6 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+bootJar {
+    archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
