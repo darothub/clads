@@ -4,9 +4,9 @@ server:
     include-message: always
 spring:
   datasource:
-    username: vjqcknjshmjspf
-    password: 25d1ec078692fde0891f10122456c41d2238bb241480d5fc8c8778aea0e7049b
-    url: jdbc:postgres://vjqcknjshmjspf:25d1ec078692fde0891f10122456c41d2238bb241480d5fc8c8778aea0e7049b@ec2-54-158-232-223.compute-1.amazonaws.com:5432/dfdh75bjru3dts
+    username: ispaireqhaivvb
+    password: e7330490e9ecba87cbacdc086de696f13a556ae2a337ab9cc7f0247721b73b3d
+    url: jdbc:postgresql://ec2-34-195-143-54.compute-1.amazonaws.com:5432/dfgjpl96fdvq7n
 
   jpa:
     hibernate:
@@ -31,9 +31,9 @@ spring:
           auth: true
           starttls:
             enable: true
-          connectiontimeout: 10000
-          timeout: 10000
-          writetimeout: 10000
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 
 
 jwt:
