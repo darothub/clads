@@ -21,7 +21,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private final SuccessResponseHandler successResponseHandler;
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public ResponseEntity<Object> home() {
         return ResponseEntity.ok("Welcome to Clads home");
     }
