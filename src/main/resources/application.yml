@@ -31,9 +31,9 @@ spring:
           auth: true
           starttls:
             enable: true
-          connectiontimeout: 10000
-          timeout: 10000
-          writetimeout: 10000
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 3000
 
 
 jwt:
