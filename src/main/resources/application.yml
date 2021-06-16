@@ -18,25 +18,6 @@ spring:
         format_sql: true
     show-sql: true
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: darotudeen@gmail.com
-    password: imltmaxchlxqdqeu
-
-    properties:
-      mail:
-        smtp:
-          ssl:
-            trust: "*"
-          auth: true
-          starttls:
-            enable: true
-          connectiontimeout: 5000
-          timeout: 3000
-          writetimeout: 5000
-
-
 jwt:
   header: Authorization
   secret: secretkey123
