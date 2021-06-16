@@ -1,12 +1,12 @@
 package com.decagon.clads.entities.artisan;
 
+import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.engine.internal.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,8 +27,8 @@ import java.util.Collections;
 @IdClass(ArtisanId.class)
 public class Artisan implements UserDetails {
     @Id
-    @SequenceGenerator(name = "artisan_sequence", sequenceName = "artisan_sequence", allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="artisan_sequence")
+    @SequenceGenerator(name = "artisan_sequence", sequenceName = "artisan_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "artisan_sequence")
     private Long id;
     @NotNull
     @NotBlank
@@ -41,9 +41,7 @@ public class Artisan implements UserDetails {
     @NotBlank
     @Pattern(regexp = ConstantUtils.CATEGORY_PATTERN, message = "Invalid category")
     private String role;
-    @NotNull
     private String password;
-    @Pattern(regexp = ConstantUtils.IMAGE_PATTERN, message = "Invalid image")
     private String thumbnail;
     @Id
     @Email
@@ -57,30 +55,41 @@ public class Artisan implements UserDetails {
     private String country;
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "street", column = @Column(name = "work_street")),
-            @AttributeOverride( name = "city", column = @Column(name = "work_city")),
-            @AttributeOverride( name = "state", column = @Column(name = "work_state"))
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride(name = "state", column = @Column(name = "work_state"))
     })
     private Address workshopAddress = new Address();
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride( name = "street", column = @Column(name = "show_room_street")),
-            @AttributeOverride( name = "city", column = @Column(name = "show_room_city")),
-            @AttributeOverride( name = "state", column = @Column(name = "show_room_state"))
+            @AttributeOverride(name = "street", column = @Column(name = "show_room_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "show_room_city")),
+            @AttributeOverride(name = "state", column = @Column(name = "show_room_state"))
     })
     private Address showroomAddress = new Address();
     private int noOfEmployees;
     @AttributeOverrides({
-            @AttributeOverride( name = "name", column = @Column(name = "assoc_name")),
-            @AttributeOverride( name = "ward", column = @Column(name = "assoc_ward")),
-            @AttributeOverride( name = "lga", column = @Column(name = "assoc_lga")),
-            @AttributeOverride( name = "state", column = @Column(name = "assoc_state"))
+            @AttributeOverride(name = "name", column = @Column(name = "assoc_name")),
+            @AttributeOverride(name = "ward", column = @Column(name = "assoc_ward")),
+            @AttributeOverride(name = "lga", column = @Column(name = "assoc_lga")),
+            @AttributeOverride(name = "state", column = @Column(name = "assoc_state"))
     })
     @Embedded
     private Association union = new Association();
     private boolean enabled = false;
     private boolean locked = false;
-    private String auth_provider = "regular";
+    @Enumerated(EnumType.STRING)
+    private AUTHPROVIDER authprovider = AUTHPROVIDER.REGULAR;
+
+    public Artisan(String firstName, String lastName, String otherName, String role, String thumbnail, String email, AUTHPROVIDER authprovider){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.otherName = otherName;
+        this.role = role;
+        this.thumbnail = thumbnail;
+        this.email = email;
+        this.authprovider = authprovider;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -94,13 +103,15 @@ public class Artisan implements UserDetails {
     }
 
     @Override
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
-    public String getFirstName(){
+
+    public String getFirstName() {
         return firstName;
     }
-    public String getLastName(){
+
+    public String getLastName() {
         return lastName;
     }
 
