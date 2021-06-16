@@ -6,6 +6,7 @@ import com.decagon.clads.services.ArtisanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 @Component
 @Slf4j
+@EqualsAndHashCode(callSuper = false)
 public class JwtFilter extends OncePerRequestFilter {
 
     private JWTUtility jwtUtility;
@@ -47,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("jwt filter");
+//        log.info("jwt filter");
         String authorization = request.getHeader("Authorization");
 
         try{
@@ -74,10 +76,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         try{
             if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-                log.info("token "+token + "\n");
+//                log.info("token "+token + "\n");
 
                 UserDetails userDetails = artisanService.loadUserByUsername(userName);
-                log.info("UserDTO {}", userDetails);
+//                log.info("UserDTO {}", userDetails);
                 if (jwtUtility.validateToken(token, userDetails)) {
                     log.info("token is valid");
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

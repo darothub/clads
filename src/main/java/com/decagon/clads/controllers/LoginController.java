@@ -31,7 +31,7 @@ public class LoginController {
 
     @PostMapping(path = "/login/google")
     public ResponseEntity<ResponseModel> loginWithGoogle(@RequestBody AuthRole role, @RequestHeader(value = "Authorization") String auth) {
-        log.info("Herererer {}", auth);
+//        log.info("Herererer {}", auth);
         String token = loginService.loginWithGoogleService(role, auth);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, token);
     }

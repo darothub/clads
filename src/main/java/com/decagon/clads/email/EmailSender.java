@@ -1,6 +1,5 @@
 package com.decagon.clads.email;
 
-import net.bytebuddy.agent.builder.AgentBuilder;
 
 public interface EmailSender {
 

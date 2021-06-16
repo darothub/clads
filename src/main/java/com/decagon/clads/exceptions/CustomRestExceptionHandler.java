@@ -5,6 +5,7 @@ import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.model.response.ResponseModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +37,7 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 @ControllerAdvice
 @Slf4j
+@EqualsAndHashCode(callSuper = false)
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseModel responseModel;

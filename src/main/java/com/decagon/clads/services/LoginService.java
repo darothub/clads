@@ -37,7 +37,7 @@ public class LoginService {
     public String loginService(LoginRequest loginRequest){
         Artisan artisan = artisanRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(()-> new IllegalStateException("Invalid username/password"));
-        log.info("Artisan {}", artisan);
+//        log.info("Artisan {}", artisan);
         if(!artisan.isEnabled()){
             String token = jwtUtility.generateToken(artisan);
             ConfirmationToken confirmationToken = new ConfirmationToken(
@@ -69,9 +69,9 @@ public class LoginService {
                     // Or, if multiple clients access the backend:
                     //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                     .build();
-            log.info("verify things filter");
+//            log.info("verify things filter");
             String token = auth.substring(7);
-            log.info("Token {}", token);
+//            log.info("Token {}", token);
 
             GoogleIdToken idToken = verifier.verify(token);
             if (null != idToken) {
@@ -92,7 +92,7 @@ public class LoginService {
                             email,
                             AUTHPROVIDER.GOOGLE
                     );
-                    log.info("Artisan {}", artisan);
+//                    log.info("Artisan {}", artisan);
                     Artisan newArtisan = artisanRepository.save(artisan);
                     newArtisan.setEnabled(true);
                     return jwtUtility.generateToken(newArtisan);
@@ -105,6 +105,6 @@ public class LoginService {
         catch (Exception e){
             log.info("Google sign error {}", e.getMessage());
         }
-        throw new IllegalStateException("Invalid username/password");
+        throw new IllegalStateException("Login auth error");
     }
 }
