@@ -79,7 +79,7 @@ public class LoginService {
                 log.info("IdToken {}", idToken);
                 String email = idToken.getPayload().getEmail();
                 Optional<Artisan> isOldUser = artisanRepository.findByEmail(email);
-                if (!isOldUser.isPresent()) {
+                if (isOldUser.isEmpty()) {
                     String pictureUrl = (String) payload.get("picture");
                     String familyName = (String) payload.get("family_name");
                     String givenName = (String) payload.get("given_name");
