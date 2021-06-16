@@ -50,7 +50,7 @@ public class ArtisanService implements UserDetailsService {
 
     public String signUpArtisan(Artisan artisan){
         Optional<Artisan> artisanExists = artisanRepository.findByEmail(artisan.getEmail());
-        if (artisanExists.isEmpty()) {
+        if (!artisanExists.isPresent()) {
             String encodedPassword = bCryptPasswordEncoder.encode(artisan.getPassword());
             artisan.setPassword(encodedPassword);
             Artisan newArtisan = artisanRepository.save(artisan);
@@ -86,7 +86,7 @@ public class ArtisanService implements UserDetailsService {
 
     public String signUpGoogleArtisan(Artisan artisan){
         Optional<Artisan> artisanExists = artisanRepository.findByEmail(artisan.getEmail());
-        if (artisanExists.isEmpty()) {
+        if (!artisanExists.isPresent()) {
             String encodedPassword = bCryptPasswordEncoder.encode(artisan.getPassword());
             artisan.setPassword(encodedPassword);
             Artisan newArtisan = artisanRepository.save(artisan);
