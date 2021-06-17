@@ -4,13 +4,13 @@ server:
     include-message: always
 spring:
   datasource:
-    username: postgres
-    password: password
-    url: jdbc:postgresql://localhost:5432/clads
+    username: ispaireqhaivvb
+    password: e7330490e9ecba87cbacdc086de696f13a556ae2a337ab9cc7f0247721b73b3d
+    url: jdbc:postgresql://ec2-34-195-143-54.compute-1.amazonaws.com:5432/dfgjpl96fdvq7n
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -33,7 +33,7 @@ spring:
             enable: true
           connectiontimeout: 5000
           timeout: 3000
-          writetimeout: 5000
+          writetimeout: 3000
 
 
 jwt:
@@ -41,4 +41,6 @@ jwt:
   secret: secretkey123
 
 host:
-  base: http://localhost:8080/api/v1/
+  base: https://clads-service.herokuapp.com/api/v1/
+
+

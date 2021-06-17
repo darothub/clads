@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +29,10 @@ public class JWTUtility implements Serializable {
 
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    public String secretKey;
 
+    @Value("${host.base}")
+    public String host;
     //retrieve username from jwt token
     public String getEmailAddressFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);

@@ -27,6 +27,7 @@ public class RegistrationService {
     private final EmailSender emailSender;
     private final ModelMapper modelMapper;
     private final ErrorResponse errorResponse;
+    private final ConstantUtils constantUtils;
 
     public CompletableFuture<Object> register(Artisan artisan) {
         ArtisanDTO artisanDTO = modelMapper.map(artisan, ArtisanDTO.class);
@@ -37,8 +38,8 @@ public class RegistrationService {
                 errorResponse.setError(e.getMessage());
                 throw new CustomException(errorResponse);
             }
-            String link = String.format(ConstantUtils.PRODUCTION_HOST+"confirm?token=%s", res);
-            log.info("Thread2 {}", Thread.currentThread());
+            String link = String.format(constantUtils.host+"confirm?token=%s", res);
+//            log.info("Thread2 {}", Thread.currentThread());
             emailSender.send(artisanDTO.getEmail(), emailSender.buildEmail(artisanDTO.getFirstName(), link));
             return res;
         });
