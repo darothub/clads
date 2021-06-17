@@ -20,8 +20,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: darotudeen@gmail.com
-    password: imltmaxchlxqdqeu
+    username: cladsafrica@gmail.com
+    password: CladsAfricaNaira
 
     properties:
       mail:

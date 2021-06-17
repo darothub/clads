@@ -81,7 +81,7 @@ public class Artisan implements UserDetails {
     private Set<String> genderFocus = new HashSet<>(Arrays.asList("Male", "Female", "Kids", "Unisex"));
     private boolean trained = false;
     @Embedded
-    private MeasurementOption measurementOption;
+    private MeasurementOption measurementOption = new MeasurementOption();
     private String deliveryTime;
     private boolean enabled = false;
     private boolean locked = false;
