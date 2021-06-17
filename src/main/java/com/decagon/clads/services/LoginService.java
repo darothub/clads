@@ -34,6 +34,7 @@ public class LoginService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTUtility jwtUtility;
     private final ConfirmationTokenService confirmationTokenService;
+    private final ConstantUtils constantUtils;
     public String loginService(LoginRequest loginRequest){
         Artisan artisan = artisanRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(()-> new IllegalStateException("Invalid username/password"));
@@ -47,7 +48,7 @@ public class LoginService {
                     artisan
             );
             confirmationTokenService.updateConfirmationToken(confirmationToken);
-            String link = String.format("http://localhost:8080/api/v1/confirm?token=%s", token);
+            String link = String.format(constantUtils.host+"confirm?token=%s", token);
             emailSender.send(artisan.getEmail(), emailSender.buildEmail(artisan.getFirstName(), link));
             throw new IllegalStateException("Kindly verify your email address");
         }

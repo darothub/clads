@@ -42,7 +42,6 @@ public class RegistrationController {
         return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
     }
 
-
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
     }

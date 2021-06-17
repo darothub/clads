@@ -4,7 +4,6 @@ import com.decagon.clads.email.EmailSender;
 import com.decagon.clads.entities.artisan.Artisan;
 import com.decagon.clads.entities.token.ConfirmationToken;
 import com.decagon.clads.exceptions.CustomException;
-import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.utils.ConstantUtils;
@@ -35,7 +34,7 @@ public class RegistrationService {
         return CompletableFuture.supplyAsync(() -> artisanService.signUpArtisan(artisan)).handle((res, e)->{
 
             if(e != null){
-                errorResponse.setError(e.getMessage());
+                errorResponse.setPayload(e.getMessage());
                 throw new CustomException(errorResponse);
             }
             String link = String.format(constantUtils.host+"confirm?token=%s", res);

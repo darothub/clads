@@ -15,8 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 
 @Entity
@@ -76,6 +75,14 @@ public class Artisan implements UserDetails {
     })
     @Embedded
     private Association union = new Association();
+    @ElementCollection
+    private Set<String> specialties = new HashSet<>();
+    @ElementCollection
+    private Set<String> genderFocus = new HashSet<>(Arrays.asList("Male", "Female", "Kids", "Unisex"));
+    private boolean trained = false;
+    @Embedded
+    private MeasurementOption measurementOption;
+    private String deliveryTime;
     private boolean enabled = false;
     private boolean locked = false;
     @Enumerated(EnumType.STRING)

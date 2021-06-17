@@ -83,7 +83,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
         error.setMessage(NOT_FOUND.toString());
         error.setStatus(NOT_FOUND.value());
-        error.setError(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
+        error.setPayload(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
         return buildResponseEntity(error);
     }
 
@@ -92,7 +92,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
             IllegalStateException ex) {
         error.setMessage(ex.getMessage());
         error.setStatus(BAD_REQUEST.value());
-        error.setError(ex.getLocalizedMessage());
+        error.setPayload(ex.getLocalizedMessage());
         return buildResponseEntity(error);
     }
 
@@ -131,7 +131,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         error.setMessage(BAD_REQUEST.toString());
         Map<String, String> errors = new HashMap<>();
         fieldErrors.forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
-        error.setError(errors);
+        error.setPayload(errors);
         return error;
     }
 
@@ -149,13 +149,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {
             errors.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
-        error.setError(errors);
+        error.setPayload(errors);
     }
 
     private ResponseEntity<Object> errorHandlerController(Exception ex, HttpStatus status) {
         error.setMessage(status.toString());
         error.setStatus(status.value());
-        error.setError(ex.getLocalizedMessage());
+        error.setPayload(ex.getLocalizedMessage());
         return new ResponseEntity<>(error, HttpStatus.valueOf(error.getStatus()));
     }
 }

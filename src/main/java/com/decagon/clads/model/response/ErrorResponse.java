@@ -14,5 +14,5 @@ import org.springframework.stereotype.Component;
 public class ErrorResponse extends ResponseModel {
     private int status;
     private String message;
-    private Object error;
+    private Object payload;
 }

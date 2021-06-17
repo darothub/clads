@@ -5,14 +5,12 @@ import com.decagon.clads.exceptions.CustomException;
 import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ErrorResponse;
-import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.repositories.ArtisanRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +22,7 @@ public class ProfileService {
     private final ErrorResponse errorResponse;
 
     public ArtisanDTO getArtisanProfile() {
-        errorResponse.setError("Profile service error");
+        errorResponse.setPayload("Profile service error");
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage("User not found");
 
