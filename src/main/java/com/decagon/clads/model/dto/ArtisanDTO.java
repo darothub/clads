@@ -2,9 +2,11 @@ package com.decagon.clads.model.dto;
 
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.artisan.Association;
+import com.decagon.clads.entities.artisan.MeasurementOption;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +21,14 @@ public class ArtisanDTO {
     private String phoneNumber;
     private String gender;
     private String country;
-    private Address workshopAddress = new Address();
-    private Address showroomAddress = new Address();
+    private Address workshopAddress;
+    private Address showroomAddress;
     private Association union;
+    private Set<String> specialties;
+    private Set<String> genderFocus;
+    private boolean trained = false;
+    private MeasurementOption measurementOption = new MeasurementOption();
+    private String deliveryTime;
 
 
 }
