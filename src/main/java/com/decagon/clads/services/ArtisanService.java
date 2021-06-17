@@ -11,6 +11,8 @@ import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -28,6 +31,7 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 @Slf4j
+@CacheConfig(cacheNames = {"artisan"})
 public class ArtisanService implements UserDetailsService {
 
     private final ArtisanRepository artisanRepository;
@@ -36,6 +40,7 @@ public class ArtisanService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTUtility jwtUtility;
 
+    @Cacheable
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Artisan> artisan = artisanRepository.findByEmail(email);
@@ -47,7 +52,7 @@ public class ArtisanService implements UserDetailsService {
             throw new UsernameNotFoundException("User not authorized.");
         }
     }
-
+    @Cacheable
     public String signUpArtisan(Artisan artisan){
         Optional<Artisan> artisanExists = artisanRepository.findByEmail(artisan.getEmail());
         if (artisanExists.isEmpty()) {

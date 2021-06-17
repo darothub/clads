@@ -43,9 +43,9 @@ public class Artisan implements UserDetails {
     private String password;
     private String thumbnail;
     @Id
-    @Email
     @NotBlank
     @NotNull
+    @Email
     private String email;
     @Pattern(regexp = ConstantUtils.PHONE_NUMBER_PATTERN, message = "Invalid phone number")
     private String phoneNumber;

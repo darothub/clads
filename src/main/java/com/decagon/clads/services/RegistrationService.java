@@ -10,6 +10,8 @@ import com.decagon.clads.utils.ConstantUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor
 @Service
 @Slf4j
+@CacheConfig(cacheNames = {"registration"})
 public class RegistrationService {
 
     private final ArtisanService artisanService;
@@ -28,13 +31,14 @@ public class RegistrationService {
     private final ErrorResponse errorResponse;
     private final ConstantUtils constantUtils;
 
+    @Cacheable
     public CompletableFuture<Object> register(Artisan artisan) {
         ArtisanDTO artisanDTO = modelMapper.map(artisan, ArtisanDTO.class);
         log.info("Thread {}", Thread.currentThread());
         return CompletableFuture.supplyAsync(() -> artisanService.signUpArtisan(artisan)).handle((res, e)->{
 
             if(e != null){
-                errorResponse.setPayload(e.getMessage());
+                errorResponse.setMessage(e.getMessage());
                 throw new CustomException(errorResponse);
             }
             String link = String.format(constantUtils.host+"confirm?token=%s", res);
@@ -44,6 +48,8 @@ public class RegistrationService {
         });
     }
 
+
+    @Cacheable
     @Transactional
     public String confirmToken(String token) {
 

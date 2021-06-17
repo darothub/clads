@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class CaffeineCacheConfiguration {
 
     public CacheManager cacheManager() {
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager("clads");
+        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager("registration", "artisan");
         caffeineCacheManager.setCaffeine(caffeineCacheBuilder());
         return caffeineCacheManager;
     }
