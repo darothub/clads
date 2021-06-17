@@ -7,6 +7,7 @@ import com.decagon.clads.exceptions.CustomException;
 import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ErrorResponse;
+import com.decagon.clads.utils.ConstantUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -36,7 +37,7 @@ public class RegistrationService {
                 errorResponse.setError(e.getMessage());
                 throw new CustomException(errorResponse);
             }
-            String link = String.format("http://localhost:8080/api/v1/confirm?token=%s", res);
+            String link = String.format(ConstantUtils.PRODUCTION_HOST+"confirm?token=%s", res);
             log.info("Thread2 {}", Thread.currentThread());
             emailSender.send(artisanDTO.getEmail(), emailSender.buildEmail(artisanDTO.getFirstName(), link));
             return res;

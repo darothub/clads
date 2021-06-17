@@ -11,4 +11,6 @@ public class ConstantUtils {
     public static final String IMAGE_PATTERN = "[a-zA-z0-9]+.(png|jpg|jpeg)";
     public static final String BASE_URL = "/api/v1";
     public static final String CLIENT_ID ="525232674561-10iuvisduhg0ebrjgksg0cpd7mdlr0nj.apps.googleusercontent.com";
+    public static final String LOCAL_HOST = "http://localhost:8080/api/v1/";
+    public static final String PRODUCTION_HOST = "https://clads-service.herokuapp.com/api/v1/";
 }
