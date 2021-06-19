@@ -107,10 +107,12 @@ public class LoginService {
                     return jwtUtility.generateToken(isOldUser.get());
                 }
             }
+            else{
+                throw new IllegalStateException("IdToken is null");
+            }
         }
         catch (Exception e){
             throw new IllegalStateException(e.getMessage());
         }
-        throw new IllegalStateException("Login auth error");
     }
 }
