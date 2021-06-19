@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -74,6 +75,7 @@ public class Artisan implements UserDetails {
             @AttributeOverride(name = "state", column = @Column(name = "assoc_state"))
     })
     @Embedded
+    @Valid
     private Association union;
     @ElementCollection
     private Set<String> specialties = new HashSet<>();

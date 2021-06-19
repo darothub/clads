@@ -2,6 +2,7 @@ package com.decagon.clads.services.client;
 
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.client.Client;
+import com.decagon.clads.entities.client.Measurement;
 import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.repositories.client.ClientRepository;
 import lombok.AllArgsConstructor;
@@ -44,5 +45,19 @@ public class ClientService {
            throw new IllegalStateException(e.getMessage());
         }
 
+    }
+
+    public String addMeasurements(Set<Measurement> measurement, String id) {
+        try{
+            Long clientId = (long) Integer.parseInt(id);
+            Client client = clientRepository.getById(clientId);
+            log.info("Delivery address {}", client.getDeliveryAddresses());
+            client.getMeasurements().addAll(measurement);
+            clientRepository.save(client);
+            return "Measurement added successfully";
+        }
+        catch (Exception e){
+            throw new IllegalStateException(e.getMessage());
+        }
     }
 }

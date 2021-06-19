@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -38,7 +39,9 @@ public class Client {
     @Pattern(regexp = ConstantUtils.GENDER_PATTERN, message = "Invalid gender type")
     private String gender;
     @ElementCollection
+    @Valid
     private Set<Address> deliveryAddresses = new HashSet<>();
     @ElementCollection
+    @Valid
     private Set<Measurement> measurements = new HashSet<>();
 }

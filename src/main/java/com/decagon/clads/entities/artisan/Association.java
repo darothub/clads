@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -16,8 +18,13 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @Embeddable
 public class Association {
-    private String name = "";
-    private String ward = "";
-    private String lga = "";
-    private String state = "";
+    @NotEmpty
+    @Size(min=3)
+    private String name;
+    @NotEmpty
+    private String ward;
+    @NotEmpty
+    private String lga;
+    @NotEmpty
+    private String state;
 }

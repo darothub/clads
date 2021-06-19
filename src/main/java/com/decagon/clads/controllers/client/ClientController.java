@@ -3,6 +3,7 @@ package com.decagon.clads.controllers.client;
 import com.decagon.clads.controllers.SuccessResponseHandler;
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.client.Client;
+import com.decagon.clads.entities.client.Measurement;
 import com.decagon.clads.model.request.LoginRequest;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.services.LoginService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -40,6 +42,11 @@ public class ClientController {
     @PostMapping(path = "/client/{id}/delivery-address")
     public ResponseEntity<ResponseModel> addDeliveryAddress(@Valid @RequestBody Address address, @PathVariable String id) {
         String response = clientService.addDeliveryAddress(address, id);
-        return successResponseHandler.handleSuccessResponseEntity("Client added successfully", HttpStatus.OK, response);
+        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, "Client updated successfully");
+    }
+    @PostMapping(path = "/client/{id}/measurements")
+    public ResponseEntity<ResponseModel> addMeasurements(@Valid @RequestBody Set<Measurement> measurement, @PathVariable String id) {
+        String response = clientService.addMeasurements(measurement, id);
+        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, "Client updated successfully");
     }
 }
