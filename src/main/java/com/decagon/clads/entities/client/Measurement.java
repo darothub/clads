@@ -1,30 +1,24 @@
-package com.decagon.clads.entities.artisan;
+package com.decagon.clads.entities.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Primary;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @EqualsAndHashCode(callSuper = false)
 @Embeddable
-public class Association {
+public class Measurement {
     @NotEmpty
     @Size(min=3)
-    private String name;
-    @NotEmpty
-    private String ward;
-    @NotEmpty
-    private String lga;
-    @NotEmpty
-    private String state;
+    private String title;
+    @Positive
+    private int value;
 }

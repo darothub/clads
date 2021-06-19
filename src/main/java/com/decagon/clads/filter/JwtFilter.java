@@ -57,6 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (null != authorization && authorization.startsWith("Bearer ")) {
                 token = authorization.substring(7);
                 userName = jwtUtility.getEmailAddressFromToken(token);
+                userId = jwtUtility.getIdFromToken(token);
             }
             else{
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -100,7 +101,7 @@ public class JwtFilter extends OncePerRequestFilter {
         catch (Exception e){
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), String.valueOf(HttpStatus.UNAUTHORIZED), "You are unauthorized");
+            ErrorResponse error = new ErrorResponse(response.getStatus(), String.valueOf(response.getStatus()), e.getLocalizedMessage());
 
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);

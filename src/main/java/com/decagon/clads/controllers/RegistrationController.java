@@ -34,7 +34,7 @@ public class RegistrationController {
     @PostMapping("/artisans/register")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
         String token = (String) registrationService.register(artisan).join();
-        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, token);
+        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED);
     }
     @GetMapping(path = "/confirm")
     public ResponseEntity<ResponseModel> confirm(@RequestParam("token") String token) {
@@ -44,6 +44,9 @@ public class RegistrationController {
 
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
+    }
+    public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status) {
+        return successResponseHandler.handleSuccessResponseEntity(message, status);
     }
 }
 

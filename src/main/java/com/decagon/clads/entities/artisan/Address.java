@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
@@ -12,7 +14,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class Address  {
-    private String street ="";
-    private String city ="";
-    private String state="";
+    @NotEmpty
+    @Size(min=3)
+    private String street;
+    @NotEmpty
+    @Size(min=3)
+    private String city;
+    @NotEmpty
+    @Size(min=3)
+    private String state;
 }

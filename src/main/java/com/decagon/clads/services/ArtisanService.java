@@ -36,7 +36,6 @@ public class ArtisanService implements UserDetailsService {
 
     private final ArtisanRepository artisanRepository;
     private final ConfirmationTokenService confirmationTokenService;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTUtility jwtUtility;
 
@@ -82,23 +81,6 @@ public class ArtisanService implements UserDetailsService {
             log.info("ConfirmationToken {}", confirmationToken);
             confirmationTokenService.updateConfirmationToken(confirmationToken);
             return token;
-        }
-        else {
-            ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.toString(), String.format("%s already taken", artisan.getEmail()));
-            throw new CustomException(error);
-        }
-    }
-
-    public String signUpGoogleArtisan(Artisan artisan){
-        Optional<Artisan> artisanExists = artisanRepository.findByEmail(artisan.getEmail());
-        if (artisanExists.isEmpty()) {
-            String encodedPassword = bCryptPasswordEncoder.encode(artisan.getPassword());
-            artisan.setPassword(encodedPassword);
-            Artisan newArtisan = artisanRepository.save(artisan);
-            return jwtUtility.generateToken(newArtisan);
-        }
-        else if (!artisanExists.get().isEnabled()){
-            return jwtUtility.generateToken(artisanExists.get());
         }
         else {
             ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.toString(), String.format("%s already taken", artisan.getEmail()));

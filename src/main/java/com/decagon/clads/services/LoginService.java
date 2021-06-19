@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,7 +61,11 @@ public class LoginService {
     }
     @Transactional
     public String loginWithGoogleService(AuthRole role, String auth){
+        String token;
         try{
+            if (auth.isBlank()){
+                throw new AuthenticationException("Invalid auth credential");
+            }
             final HttpTransport transport = new NetHttpTransport();
             final GsonFactory jsonFactory = new GsonFactory();
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
@@ -71,7 +76,7 @@ public class LoginService {
                     //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                     .build();
 //            log.info("verify things filter");
-            String token = auth.substring(7);
+            token = auth.substring(7);
 //            log.info("Token {}", token);
 
             GoogleIdToken idToken = verifier.verify(token);
@@ -104,7 +109,7 @@ public class LoginService {
             }
         }
         catch (Exception e){
-            log.info("Google sign error {}", e.getMessage());
+            throw new IllegalStateException(e.getMessage());
         }
         throw new IllegalStateException("Login auth error");
     }

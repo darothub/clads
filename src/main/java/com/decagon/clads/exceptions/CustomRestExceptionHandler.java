@@ -11,6 +11,8 @@ import org.hibernate.exception.SQLGrammarException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -66,6 +68,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return errorHandlerController(ex, INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({UsernameNotFoundException.class})
+    public ResponseEntity<Object> handleUsernameNotFoundException(
+            UsernameNotFoundException ex) {
+        return errorHandlerController(ex, NOT_FOUND);
+    }
+
     @ExceptionHandler({SocketTimeoutException.class})
     public ResponseEntity<Object> handleSocketTimeoutException(
             SocketTimeoutException ex) {
@@ -75,6 +83,13 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return errorHandlerController(ex, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        error.setMessage("Request body is not readable");
+        error.setStatus(BAD_REQUEST.value());
+        return buildResponseEntity(error);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -92,9 +107,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
             IllegalStateException ex) {
         error.setMessage(ex.getMessage());
         error.setStatus(BAD_REQUEST.value());
-        error.setPayload(ex.getLocalizedMessage());
         return buildResponseEntity(error);
     }
+
 
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<Object> handleCustomException(

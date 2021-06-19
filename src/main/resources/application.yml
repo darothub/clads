@@ -2,6 +2,7 @@ server:
   error:
     include-binding-errors: always
     include-message: always
+    include-stacktrace: on_param
 spring:
   datasource:
     username: postgres

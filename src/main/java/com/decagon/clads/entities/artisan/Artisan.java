@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -58,14 +59,14 @@ public class Artisan implements UserDetails {
             @AttributeOverride(name = "city", column = @Column(name = "work_city")),
             @AttributeOverride(name = "state", column = @Column(name = "work_state"))
     })
-    private Address workshopAddress = new Address();
+    private Address workshopAddress;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "street", column = @Column(name = "show_room_street")),
             @AttributeOverride(name = "city", column = @Column(name = "show_room_city")),
             @AttributeOverride(name = "state", column = @Column(name = "show_room_state"))
     })
-    private Address showroomAddress = new Address();
+    private Address showroomAddress;
     private int noOfEmployees;
     @AttributeOverrides({
             @AttributeOverride(name = "name", column = @Column(name = "assoc_name")),
@@ -74,7 +75,8 @@ public class Artisan implements UserDetails {
             @AttributeOverride(name = "state", column = @Column(name = "assoc_state"))
     })
     @Embedded
-    private Association union = new Association();
+    @Valid
+    private Association union;
     @ElementCollection
     private Set<String> specialties = new HashSet<>();
     @ElementCollection
@@ -83,6 +85,10 @@ public class Artisan implements UserDetails {
     @Embedded
     private MeasurementOption measurementOption = new MeasurementOption();
     private String deliveryTime;
+    @ElementCollection
+    private Set<String> paymentTerms = new HashSet<>();
+    @ElementCollection
+    private Set<String> paymentOptions = new HashSet<>();
     private boolean enabled = false;
     private boolean locked = false;
     @Enumerated(EnumType.STRING)
