@@ -52,7 +52,7 @@ public class ClientService {
             Long clientId = (long) Integer.parseInt(id);
             Client client = clientRepository.getById(clientId);
             log.info("Delivery address {}", client.getDeliveryAddresses());
-            client.getMeasurements().addAll(measurement);
+            client.setMeasurements(measurement);
             clientRepository.save(client);
             return "Measurement added successfully";
         }
