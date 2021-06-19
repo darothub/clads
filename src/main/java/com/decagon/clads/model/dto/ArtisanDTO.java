@@ -6,6 +6,9 @@ import com.decagon.clads.entities.artisan.MeasurementOption;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.ElementCollection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -29,6 +32,8 @@ public class ArtisanDTO {
     private boolean trained = false;
     private MeasurementOption measurementOption = new MeasurementOption();
     private String deliveryTime;
+    private Set<String> paymentTerms = new HashSet<>();
+    private Set<String> paymentOptions = new HashSet<>();
 
 
 }

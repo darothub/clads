@@ -20,4 +20,11 @@ public class SuccessResponseHandleImpl implements SuccessResponseHandler {
         successResponse.setPayload(payload);
         return new ResponseEntity<>(successResponse, status);
     }
+
+    @Override
+    public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status) {
+        successResponse.setMessage(message);
+        successResponse.setStatus(status.value());
+        return new ResponseEntity<>(successResponse, status);
+    }
 }

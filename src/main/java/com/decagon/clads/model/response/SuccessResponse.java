@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Component
 @EqualsAndHashCode(callSuper = false)
