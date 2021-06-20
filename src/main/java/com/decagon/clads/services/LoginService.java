@@ -6,6 +6,7 @@ import com.decagon.clads.entities.artisan.AuthRole;
 import com.decagon.clads.entities.token.ConfirmationToken;
 import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.request.LoginRequest;
+import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
 import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
@@ -36,6 +37,7 @@ public class LoginService {
     private final JWTUtility jwtUtility;
     private final ConfirmationTokenService confirmationTokenService;
     private final ConstantUtils constantUtils;
+    private ErrorResponse errorResponse;
     public String loginService(LoginRequest loginRequest){
         Artisan artisan = artisanRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(()-> new IllegalStateException("Invalid username/password"));
@@ -60,7 +62,7 @@ public class LoginService {
         throw new IllegalStateException("Invalid username/password");
     }
     @Transactional
-    public String loginWithGoogleService(AuthRole role, String auth){
+    public String loginWithGoogleService(String auth, AuthRole role){
         String token;
         try{
             if (auth.isBlank()){
@@ -85,7 +87,10 @@ public class LoginService {
                 log.info("IdToken {}", idToken);
                 String email = idToken.getPayload().getEmail();
                 Optional<Artisan> isOldUser = artisanRepository.findByEmail(email);
-                if (isOldUser.isEmpty()) {
+                if (isOldUser.isEmpty() && role == null ){
+                    throw new IllegalStateException("Not a registered artisan");
+                }
+                else if (isOldUser.isEmpty() && role.getRole() != null) {
                     String pictureUrl = (String) payload.get("picture");
                     String familyName = (String) payload.get("family_name");
                     String givenName = (String) payload.get("given_name");
@@ -103,8 +108,11 @@ public class LoginService {
                     newArtisan.setEnabled(true);
                     return jwtUtility.generateToken(newArtisan);
                 }
-                else{
+                else if(isOldUser.get().getAuthprovider() == AUTHPROVIDER.GOOGLE){
                     return jwtUtility.generateToken(isOldUser.get());
+                }
+                else{
+                    throw new IllegalStateException("Unknown user");
                 }
             }
             else{

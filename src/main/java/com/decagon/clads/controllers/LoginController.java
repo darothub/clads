@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -30,9 +33,9 @@ public class LoginController {
     }
 
     @PostMapping(path = "/login/google")
-    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestBody AuthRole role, @RequestHeader(value = "Authorization") String auth) {
+    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestBody(required = false) AuthRole role) {
 //        log.info("Herererer {}", auth);
-        String token = loginService.loginWithGoogleService(role, auth);
+        String token = loginService.loginWithGoogleService(auth, role);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, token);
     }
 
