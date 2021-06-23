@@ -25,7 +25,7 @@ public class UploadImagesController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseModel> uploadToDb(@RequestParam("files") MultipartFile[] files) throws IOException {
         List<UploadImageDTO> imageUploadDTO =  uploadService.uploadImagesToDb(files);
-        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.OK, imageUploadDTO);
+        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, imageUploadDTO);
     }
     @GetMapping("/download/images")
     public ResponseEntity<ResponseModel> downloadFile() throws IOException {
