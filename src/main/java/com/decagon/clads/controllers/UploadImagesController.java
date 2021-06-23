@@ -1,16 +1,11 @@
 package com.decagon.clads.controllers;
 
-import com.decagon.clads.entities.image.UploadImage;
 import com.decagon.clads.model.dto.UploadImageDTO;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.services.UploadServiceImpl;
 import com.decagon.clads.utils.ConstantUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,13 +23,9 @@ public class UploadImagesController {
     private final SuccessResponseHandler successResponseHandler;
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseModel> uploadToDb(@RequestParam("files") MultipartFile files) throws IOException {
-        if(files != null && Objects.requireNonNull(files.getContentType()).matches(ConstantUtils.IMAGE_PATTERN)){
-            List<UploadImageDTO> imageUploadDTO =  uploadService.uploadToDb(files);
-            return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.OK, imageUploadDTO);
-        }
-        return successResponseHandler.handleSuccessResponseEntity("Invalid image format", HttpStatus.BAD_REQUEST, null);
-
+    public ResponseEntity<ResponseModel> uploadToDb(@RequestParam("files") MultipartFile[] files) throws IOException {
+        List<UploadImageDTO> imageUploadDTO =  uploadService.uploadImagesToDb(files);
+        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.OK, imageUploadDTO);
     }
     @GetMapping("/download/images")
     public ResponseEntity<ResponseModel> downloadFile() throws IOException {

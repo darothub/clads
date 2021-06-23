@@ -5,6 +5,7 @@ import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.dto.UploadImageDTO;
 import com.decagon.clads.repositories.image.UploadRepository;
+import com.decagon.clads.utils.ConstantUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,12 @@ import java.util.stream.Stream;
 public class UploadServiceImpl implements UploadServices{
     private final UploadRepository uploadRepository;
     @Override
-    public List<UploadImageDTO> uploadToDb(MultipartFile files) throws IOException {
+    public List<UploadImageDTO> uploadImagesToDb(MultipartFile[] files) throws IOException {
         List<UploadImageDTO> uploadedImages = new ArrayList<>();
-        Stream.of(files).forEach(file -> {
+        Arrays.stream(files).forEach(file -> {
+            if(file != null && !Objects.requireNonNull(file.getContentType()).matches(ConstantUtils.IMAGE_PATTERN)){
+                throw new IllegalStateException("Invalid image format");
+            }
             UploadImage uploadImage = new UploadImage();
             try {
                 uploadImage.setFileData(file.getBytes());
