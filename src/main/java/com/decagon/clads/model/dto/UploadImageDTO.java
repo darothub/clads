@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
-@EqualsAndHashCode(callSuper = false)
 public class UploadImageDTO {
     private String fileId;
     private String fileType;
     private String fileName;
     private String downloadUri;
+    private String description;
     private boolean uploadStatus;
 }

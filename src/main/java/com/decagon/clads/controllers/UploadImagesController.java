@@ -1,6 +1,7 @@
 package com.decagon.clads.controllers;
 
 import com.decagon.clads.model.dto.UploadImageDTO;
+import com.decagon.clads.model.request.ImageAndDescription;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.services.UploadServiceImpl;
 import com.decagon.clads.utils.ConstantUtils;
@@ -22,9 +23,14 @@ public class UploadImagesController {
     private final UploadServiceImpl uploadService;
     private final SuccessResponseHandler successResponseHandler;
 
+//    @PostMapping("/upload")
+//    public ResponseEntity<ResponseModel> uploadToDb(@RequestParam("files") MultipartFile[] files) throws IOException {
+//        List<UploadImageDTO> imageUploadDTO =  uploadService.uploadImagesToDb(files);
+//        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, imageUploadDTO);
+//    }
     @PostMapping("/upload")
-    public ResponseEntity<ResponseModel> uploadToDb(@RequestParam("files") MultipartFile[] files) throws IOException {
-        List<UploadImageDTO> imageUploadDTO =  uploadService.uploadImagesToDb(files);
+    public ResponseEntity<ResponseModel> uploadImageAndDescriptionToDb(@RequestPart("file") MultipartFile file, @RequestPart("description") String imageAndDescription) throws IOException {
+        UploadImageDTO imageUploadDTO =  uploadService.uploadImagesAndDescriptionToDb(file, imageAndDescription);
         return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, imageUploadDTO);
     }
     @GetMapping("/download/images")
@@ -32,4 +38,6 @@ public class UploadImagesController {
         Collection<UploadImageDTO> uploadImage = uploadService.downloadImage();
         return successResponseHandler.handleSuccessResponseEntity("Images", HttpStatus.OK, uploadImage);
     }
+
+
 }

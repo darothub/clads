@@ -9,6 +9,6 @@ import java.util.Collection;
 import java.util.List;
 
 public interface UploadServices {
-    public List<UploadImageDTO> uploadImagesToDb(MultipartFile[] files) throws IOException;
+    public UploadImageDTO uploadImagesAndDescriptionToDb(MultipartFile file, String description) throws IOException;
     public Collection<UploadImageDTO> downloadImage() throws IOException;
 }
