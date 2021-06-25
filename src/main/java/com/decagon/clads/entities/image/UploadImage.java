@@ -23,7 +23,6 @@ public class UploadImage {
     private String fileName;
     private Long userId;
     private String description;
-    private String downloadUri;
     @Lob
     private byte[] fileData;
 }

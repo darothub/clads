@@ -36,6 +36,11 @@ public class JWTUtility implements Serializable {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
+    //retrieve username from jwt token
+    public String isEnabled(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
     //retrieve id from jwt token
     public Long getIdFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);

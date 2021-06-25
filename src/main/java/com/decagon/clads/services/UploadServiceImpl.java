@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -66,6 +67,7 @@ public class UploadServiceImpl implements UploadServices{
         }
         UploadImage uploadImage = new UploadImage();
         try {
+            assert file != null;
             uploadImage.setFileData(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +77,7 @@ public class UploadServiceImpl implements UploadServices{
         uploadImage.setUserId(JwtFilter.userId);
         uploadImage.setDescription(description);
         UploadImage savedImage = uploadRepository.save(uploadImage);
-
+        log.info("Upload image1 {}", uploadImage);
         UploadImageDTO imageUploadDTO = objectMapper.convertValue(savedImage, UploadImageDTO.class);
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/v1/download/images/")
@@ -90,7 +92,27 @@ public class UploadServiceImpl implements UploadServices{
     public Collection<UploadImageDTO> downloadImage() throws IOException {
         Collection<UploadImage> listOfImages = uploadRepository.findUploadImageByUserId(JwtFilter.userId);
         return listOfImages.stream().map(this::getImageDto).collect(Collectors.toList());
+    }
 
+    @Transactional
+    @Override
+    public UploadImageDTO editUploadedImageDescription(String description, String fileId) {
+        UploadImage uploadImage = uploadRepository.getById(fileId);
+        uploadImage.setDescription(description);
+        UploadImage newImage = uploadRepository.save(uploadImage);
+        UploadImageDTO imageUploadDTO = objectMapper.convertValue(newImage, UploadImageDTO.class);
+        String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/download/images/")
+                .path(uploadImage.getFileId())
+                .toUriString();
+        imageUploadDTO.setDownloadUri(uri);
+        imageUploadDTO.setUploadStatus(true);
+        return imageUploadDTO;
+    }
+
+    @Override
+    public void deleteUploadedImageDescription(String fileId) {
+        uploadRepository.deleteById(fileId);
     }
 
     public UploadImageDTO getImageDto(UploadImage image){

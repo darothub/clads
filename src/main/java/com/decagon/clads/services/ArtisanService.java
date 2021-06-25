@@ -45,6 +45,9 @@ public class ArtisanService implements UserDetailsService {
         Optional<Artisan> artisan = artisanRepository.findByEmail(email);
         try{
             Artisan a = artisan.get();
+            if(!a.isEnabled()){
+                throw new IllegalStateException("User has not been verified");
+            }
             GrantedAuthority authority = new SimpleGrantedAuthority(a.getRole());
             return new User(a.getUsername(), a.getPassword(), Collections.singletonList(authority));
         }catch (Exception exception){

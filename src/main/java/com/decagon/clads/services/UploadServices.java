@@ -11,4 +11,8 @@ import java.util.List;
 public interface UploadServices {
     public UploadImageDTO uploadImagesAndDescriptionToDb(MultipartFile file, String description) throws IOException;
     public Collection<UploadImageDTO> downloadImage() throws IOException;
+
+    UploadImageDTO editUploadedImageDescription(String description, String fileId);
+
+    void deleteUploadedImageDescription(String fileId);
 }

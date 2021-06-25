@@ -16,4 +16,5 @@ public interface UploadRepository extends JpaRepository<UploadImage, String> {
     @Modifying
     @Query("SELECT u FROM UploadImage u where u.userId = ?1")
     Collection<UploadImage> findUploadImageByUserId(Long artisanId);
+    UploadImage findByFileId(String fileId);
 }

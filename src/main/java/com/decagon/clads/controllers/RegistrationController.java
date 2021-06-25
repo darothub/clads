@@ -7,6 +7,7 @@ import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.model.response.SuccessResponse;
 import com.decagon.clads.services.RegistrationService;
 import com.decagon.clads.utils.ConstantUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private final SuccessResponseHandler successResponseHandler;
     private final ConstantUtils constantUtils;
+    private final ObjectMapper objectMapper;
 
     @GetMapping("/home")
     public ResponseEntity<Object> home() {
@@ -34,7 +36,8 @@ public class RegistrationController {
     @PostMapping("/artisans/register")
     public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
         String token = (String) registrationService.register(artisan).join();
-        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED);
+        ArtisanDTO artisanDTO = objectMapper.convertValue(artisan, ArtisanDTO.class);
+        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, artisanDTO);
     }
     @GetMapping(path = "/confirm")
     public ResponseEntity<ResponseModel> confirm(@RequestParam("token") String token) {

@@ -33,6 +33,16 @@ public class UploadImagesController {
         UploadImageDTO imageUploadDTO =  uploadService.uploadImagesAndDescriptionToDb(file, imageAndDescription);
         return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, imageUploadDTO);
     }
+    @PatchMapping("/upload/{fileId}")
+    public ResponseEntity<ResponseModel> editUploadedImageDescription(@RequestParam("description") String description, @PathVariable String fileId) throws IOException {
+        UploadImageDTO imageUploadDTO =  uploadService.editUploadedImageDescription(description, fileId);
+        return successResponseHandler.handleSuccessResponseEntity("Image edited successfully", HttpStatus.OK, imageUploadDTO);
+    }
+    @DeleteMapping("/upload/{fileId}")
+    public ResponseEntity<ResponseModel> deleteUploadedImageDescription(@PathVariable String fileId) throws IOException {
+        uploadService.deleteUploadedImageDescription(fileId);
+        return successResponseHandler.handleSuccessResponseEntity("Image deleted successfully", HttpStatus.OK, null);
+    }
     @GetMapping("/download/images")
     public ResponseEntity<ResponseModel> downloadFile() throws IOException {
         Collection<UploadImageDTO> uploadImage = uploadService.downloadImage();
