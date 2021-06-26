@@ -96,9 +96,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleEntityNotFound(
             EntityNotFoundException ex) {
 
-        error.setMessage(ex.getMessage());
+        error.setMessage(NOT_FOUND.toString());
         error.setStatus(NOT_FOUND.value());
-//        error.setPayload(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
+        error.setPayload(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
         return buildResponseEntity(error);
     }
 
@@ -143,9 +143,8 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     private ErrorResponse getValidationErrors(List<FieldError> fieldErrors) {
 
         error.setStatus(BAD_REQUEST.value());
-        error.setMessage(fieldErrors.get(0).getDefaultMessage());
+        error.setMessage(BAD_REQUEST.toString());
         Map<String, String> errors = new HashMap<>();
-
         fieldErrors.forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
         error.setPayload(errors);
         return error;

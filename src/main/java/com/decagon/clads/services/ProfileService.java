@@ -34,7 +34,7 @@ public class ProfileService {
     @Cacheable
     public Artisan getArtisan() {
         return artisanRepository.findByEmail(JwtFilter.userName)
-                    .orElseThrow(()-> new CustomException(errorResponse));
+                    .orElseThrow(()-> new IllegalStateException("User not found"));
     }
 
     public ArtisanDTO updateArtisanProfile(Artisan artisan) {

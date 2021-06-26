@@ -81,7 +81,7 @@ public class JwtFilter extends OncePerRequestFilter {
 //                log.info("token "+token + "\n");
 
                 UserDetails userDetails = artisanService.loadUserByUsername(userName);
-//                log.info("UserDTO {}", userDetails);
+//                log.info("UserDTO {}{}", userDetails, userDetails.getPassword());
                 if (jwtUtility.validateToken(token, userDetails)) {
                     log.info("token is valid");
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

@@ -9,6 +9,7 @@ import com.decagon.clads.exceptions.CustomException;
 import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
+import com.decagon.clads.utils.AUTHPROVIDER;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -45,10 +46,13 @@ public class ArtisanService implements UserDetailsService {
         Optional<Artisan> artisan = artisanRepository.findByEmail(email);
         try{
             Artisan a = artisan.get();
+            GrantedAuthority authority = new SimpleGrantedAuthority(a.getRole());
             if(!a.isEnabled()){
                 throw new IllegalStateException("User has not been verified");
             }
-            GrantedAuthority authority = new SimpleGrantedAuthority(a.getRole());
+            else if (a.getAuthprovider() == AUTHPROVIDER.GOOGLE){
+                return a;
+            }
             return new User(a.getUsername(), a.getPassword(), Collections.singletonList(authority));
         }catch (Exception exception){
             throw new UsernameNotFoundException("User not authorized.");
