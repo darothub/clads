@@ -72,8 +72,8 @@ public class ArtisanService implements UserDetailsService {
                     LocalDateTime.now().plusMinutes(15),
                     newArtisan
             );
-
-            log.info("ConfirmationToken {}", confirmationToken);
+//
+//            log.info("ConfirmationToken {}", confirmationToken);
             confirmationTokenService.saveConfirmationToken(confirmationToken);
             return token;
         }
