@@ -48,7 +48,9 @@ public class RegistrationController {
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
         return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
     }
-
+    public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status) {
+        return successResponseHandler.handleSuccessResponseEntity(message, status);
+    }
 }
 
 

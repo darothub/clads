@@ -26,7 +26,7 @@ public class ProfileController {
         return successResponseHandler.handleSuccessResponseEntity("Profile details", HttpStatus.OK, artisan);
     }
 
-    @PatchMapping(path = "/me/profile")
+    @PutMapping(path = "/me/profile")
     public ResponseEntity<ResponseModel> updateArtisanProfile(@Valid @RequestBody Artisan artisan) {
         ArtisanDTO artisanDTO = profileService.updateArtisanProfile(artisan);
         return successResponseHandler.handleSuccessResponseEntity("Profile updated successfully", HttpStatus.OK, artisanDTO);
