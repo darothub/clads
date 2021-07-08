@@ -7,6 +7,8 @@ spring:
     username: ispaireqhaivvb
     password: e7330490e9ecba87cbacdc086de696f13a556ae2a337ab9cc7f0247721b73b3d
     url: jdbc:postgresql://ec2-34-195-143-54.compute-1.amazonaws.com:5432/dfgjpl96fdvq7n
+  hikari:
+    auto-commit: false
 
   jpa:
     hibernate:
