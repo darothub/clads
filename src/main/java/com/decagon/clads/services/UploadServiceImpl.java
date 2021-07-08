@@ -80,7 +80,7 @@ public class UploadServiceImpl implements UploadServices{
         log.info("Upload image1 {}", uploadImage);
         UploadImageDTO imageUploadDTO = objectMapper.convertValue(savedImage, UploadImageDTO.class);
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/download/images/")
+                .path("/api/v1/download/image/")
                 .path(savedImage.getFileId())
                 .toUriString();
         imageUploadDTO.setDownloadUri(uri);
@@ -96,13 +96,19 @@ public class UploadServiceImpl implements UploadServices{
 
     @Transactional
     @Override
+    public UploadImage downloadImage(String id) throws IOException {
+        return uploadRepository.getById(id);
+    }
+
+    @Transactional
+    @Override
     public UploadImageDTO editUploadedImageDescription(String description, String fileId) {
         UploadImage uploadImage = uploadRepository.getById(fileId);
         uploadImage.setDescription(description);
         UploadImage newImage = uploadRepository.save(uploadImage);
         UploadImageDTO imageUploadDTO = objectMapper.convertValue(newImage, UploadImageDTO.class);
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/download/images/")
+                .path("/api/v1/download/image/")
                 .path(uploadImage.getFileId())
                 .toUriString();
         imageUploadDTO.setDownloadUri(uri);
@@ -117,7 +123,7 @@ public class UploadServiceImpl implements UploadServices{
 
     public UploadImageDTO getImageDto(UploadImage image){
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/download/images/")
+                .path("/api/v1/download/image/")
                 .path(image.getFileId())
                 .toUriString();
         UploadImageDTO imageUploadDTO = objectMapper.convertValue(image, UploadImageDTO.class);

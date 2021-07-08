@@ -12,6 +12,8 @@ public interface UploadServices {
     public UploadImageDTO uploadImagesAndDescriptionToDb(MultipartFile file, String description) throws IOException;
     public Collection<UploadImageDTO> downloadImage() throws IOException;
 
+    public UploadImage downloadImage(String id) throws IOException;
+
     UploadImageDTO editUploadedImageDescription(String description, String fileId);
 
     void deleteUploadedImageDescription(String fileId);

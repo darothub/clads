@@ -83,7 +83,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserDetails userDetails = artisanService.loadUserByUsername(userName);
 //                log.info("UserDTO {}{}", userDetails, userDetails.getPassword());
                 if (jwtUtility.validateToken(token, userDetails)) {
-                    log.info("token is valid");
+
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities()
@@ -112,6 +112,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home)").matcher(path).matches();
+        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home|download/image/*)").matcher(path).find();
     }
 }
