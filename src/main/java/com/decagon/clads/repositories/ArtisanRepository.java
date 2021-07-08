@@ -14,6 +14,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface ArtisanRepository extends JpaRepository<Artisan, Long> {
     Optional<Artisan> findByEmail(String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE Artisan a " +

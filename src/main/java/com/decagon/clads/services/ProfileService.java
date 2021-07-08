@@ -42,6 +42,7 @@ public class ProfileService {
         Artisan artisan1 = getArtisan();
         artisan.setPassword(artisan1.getPassword());
         artisan.setEnabled(artisan1.isEnabled());
+        artisan.setId(artisan1.getId());
         artisanRepository.save(artisan);
         log.info("Artisan {}", artisan1);
         return getArtisanProfile();
