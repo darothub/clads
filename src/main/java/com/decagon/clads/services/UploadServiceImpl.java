@@ -88,6 +88,7 @@ public class UploadServiceImpl implements UploadServices{
         return imageUploadDTO;
     }
 
+    @Transactional
     @Override
     public Collection<UploadImageDTO> downloadImage() throws IOException {
         Collection<UploadImage> listOfImages = uploadRepository.findUploadImageByUserId(JwtFilter.userId);

@@ -2,6 +2,7 @@ package com.decagon.clads.entities.client;
 
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.utils.ConstantUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +13,9 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +23,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-public class Client {
+public class Client  {
     @Id
     @SequenceGenerator(name = "client_sequence", sequenceName = "client_sequence", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_sequence")
@@ -40,8 +42,10 @@ public class Client {
     private String gender;
     @ElementCollection
     @Valid
+    @NotEmpty
     private Set<Address> deliveryAddresses = new HashSet<>();
     @ElementCollection
     @Valid
+    @NotEmpty
     private Set<Measurement> measurements = new HashSet<>();
 }

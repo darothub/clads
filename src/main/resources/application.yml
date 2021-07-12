@@ -10,10 +10,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/clads
     hikari:
       auto-commit: false
-
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

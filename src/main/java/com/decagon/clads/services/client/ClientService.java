@@ -3,13 +3,23 @@ package com.decagon.clads.services.client;
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.client.Client;
 import com.decagon.clads.entities.client.Measurement;
+import com.decagon.clads.exceptions.CustomException;
 import com.decagon.clads.filter.JwtFilter;
+import com.decagon.clads.model.dto.ArtisanDTO;
+import com.decagon.clads.model.dto.ClientDTO;
+import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.client.ClientRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
+import org.hibernate.proxy.HibernateProxy;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -17,6 +27,8 @@ import java.util.Set;
 @Slf4j
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final ModelMapper modelMapper;
+    private final ErrorResponse errorResponse;
     public Client addClient(Client client){
         Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
         log.info("Existed number {}", isOldClientWithPhoneNumberAndEmail);
@@ -59,5 +71,16 @@ public class ClientService {
         catch (Exception e){
             throw new IllegalStateException(e.getMessage());
         }
+    }
+    @Transactional
+    public ClientDTO getSingleClient(String id) {
+        Long clientId = (long) Integer.parseInt(id);
+        Optional<Client> client =  clientRepository.findById(clientId);
+        if (client.isEmpty()){
+            errorResponse.setMessage("Client with "+id+" is not found");
+            errorResponse.setStatus(HttpStatus.SC_NOT_FOUND);
+            throw new CustomException(errorResponse);
+        }
+        return modelMapper.map(client, ClientDTO.class);
     }
 }

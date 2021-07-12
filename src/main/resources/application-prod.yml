@@ -10,6 +10,10 @@ spring:
   hikari:
     auto-commit: false
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
   jpa:
     hibernate:
       ddl-auto: create-drop

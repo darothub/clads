@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Component
 @EqualsAndHashCode(callSuper = false)
+
 public class ErrorResponse extends ResponseModel {
     private int status;
     private String message;

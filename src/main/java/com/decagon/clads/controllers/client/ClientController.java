@@ -4,6 +4,7 @@ import com.decagon.clads.controllers.SuccessResponseHandler;
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.client.Client;
 import com.decagon.clads.entities.client.Measurement;
+import com.decagon.clads.model.dto.ClientDTO;
 import com.decagon.clads.model.request.LoginRequest;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.services.LoginService;
@@ -38,6 +39,12 @@ public class ClientController {
     public ResponseEntity<ResponseModel> getClients() {
         Collection<Client> clients = clientService.getClients();
         return successResponseHandler.handleSuccessResponseEntity("Clients", HttpStatus.OK, clients);
+    }
+    @GetMapping(path = "/client/{id}")
+    public ResponseEntity<ResponseModel> getClientById(@PathVariable String id)  {
+
+        ClientDTO client = clientService.getSingleClient(id);
+        return successResponseHandler.handleSuccessResponseEntity("Client", HttpStatus.OK, client);
     }
     @PostMapping(path = "/client/{id}/delivery-address")
     public ResponseEntity<ResponseModel> addDeliveryAddress(@Valid @RequestBody Address address, @PathVariable String id) {
