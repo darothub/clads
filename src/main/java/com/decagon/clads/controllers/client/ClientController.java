@@ -43,8 +43,18 @@ public class ClientController {
     @GetMapping(path = "/client/{id}")
     public ResponseEntity<ResponseModel> getClientById(@PathVariable String id)  {
 
-        ClientDTO client = clientService.getSingleClient(id);
+        Client client = clientService.getSingleClient(id);
         return successResponseHandler.handleSuccessResponseEntity("Client", HttpStatus.OK, client);
+    }
+    @DeleteMapping(path = "/client/{id}")
+    public ResponseEntity<ResponseModel> deleteClientById(@PathVariable String id)  {
+        String resp = clientService.deleteClientById(id);
+        return successResponseHandler.handleSuccessResponseEntity(resp, HttpStatus.OK);
+    }
+    @PutMapping(path = "/client/{id}")
+    public ResponseEntity<ResponseModel> editClientById(@Valid @RequestBody Client client, @PathVariable String id)  {
+        Client client1 = clientService.editClientById(client,id);
+        return successResponseHandler.handleSuccessResponseEntity("Client details updated", HttpStatus.OK, client1);
     }
     @PostMapping(path = "/client/{id}/delivery-address")
     public ResponseEntity<ResponseModel> addDeliveryAddress(@Valid @RequestBody Address address, @PathVariable String id) {

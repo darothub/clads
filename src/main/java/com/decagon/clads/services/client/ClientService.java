@@ -72,8 +72,7 @@ public class ClientService {
             throw new IllegalStateException(e.getMessage());
         }
     }
-    @Transactional
-    public ClientDTO getSingleClient(String id) {
+    public Client getSingleClient(String id) {
         Long clientId = (long) Integer.parseInt(id);
         Optional<Client> client =  clientRepository.findById(clientId);
         if (client.isEmpty()){
@@ -81,6 +80,37 @@ public class ClientService {
             errorResponse.setStatus(HttpStatus.SC_NOT_FOUND);
             throw new CustomException(errorResponse);
         }
-        return modelMapper.map(client, ClientDTO.class);
+        return client.get();
+    }
+
+    public String deleteClientById(String id) {
+        Long clientId = (long) Integer.parseInt(id);
+        Optional<Client> client = clientRepository.findById(clientId);
+        if (client.isEmpty()){
+            errorResponse.setMessage("Client with "+id+" is not found");
+            errorResponse.setStatus(HttpStatus.SC_NOT_FOUND);
+            throw new CustomException(errorResponse);
+        }
+        clientRepository.delete(client.get());
+        return "Client deleted successfully";
+    }
+
+    public Client editClientById(Client client, String id) {
+       try{
+           Long clientId = (long) Integer.parseInt(id);
+           client.setId(clientId);
+           Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
+           if(isOldClientWithPhoneNumberAndEmail.size() > 1){
+               errorResponse.setMessage("Incoming details has duplicates with another client, see administrator");
+               errorResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
+               throw new CustomException(errorResponse);
+           }
+           return clientRepository.save(client);
+       }
+       catch (Exception e){
+           errorResponse.setMessage(e.getMessage());
+           errorResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
+           throw new CustomException(errorResponse);
+       }
     }
 }

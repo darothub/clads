@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.SQLGrammarException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -103,6 +104,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFound(
             EntityNotFoundException ex) {
+
+        error.setMessage(NOT_FOUND.toString());
+        error.setStatus(NOT_FOUND.value());
+        error.setPayload(ex.getLocalizedMessage().replace("com.darothub.clientservice.entity.", ""));
+        return buildResponseEntity(error);
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    protected ResponseEntity<Object> handleEmptyResultDataAccessException(
+            EmptyResultDataAccessException ex) {
 
         error.setMessage(NOT_FOUND.toString());
         error.setStatus(NOT_FOUND.value());
