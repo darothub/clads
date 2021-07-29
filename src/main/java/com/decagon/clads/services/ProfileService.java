@@ -29,7 +29,7 @@ public class ProfileService {
         log.info("Email {}",  JwtFilter.userName);
         Artisan artisan = getArtisan();
         return modelMapper.map(artisan, ArtisanDTO.class);
-    }
+    } 
 
     @Cacheable
     public Artisan getArtisan() {
@@ -43,6 +43,7 @@ public class ProfileService {
         artisan.setPassword(artisan1.getPassword());
         artisan.setEnabled(artisan1.isEnabled());
         artisan.setId(artisan1.getId());
+        artisan.setAuthprovider(artisan1.getAuthprovider());
         artisanRepository.save(artisan);
         log.info("Artisan {}", artisan1);
         return getArtisanProfile();

@@ -72,10 +72,7 @@ public class LoginService {
             final GsonFactory jsonFactory = new GsonFactory();
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
                     .setIssuers(Arrays.asList("https://accounts.google.com", "accounts.google.com"))
-                    // Specify the CLIENT_ID of the app that accesses the backend:
                     .setAudience(Collections.singletonList(ConstantUtils.CLIENT_ID))
-                    // Or, if multiple clients access the backend:
-                    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
                     .build();
 //            log.info("verify things filter");
             token = auth.substring(7);
@@ -89,6 +86,9 @@ public class LoginService {
                 Optional<Artisan> isOldUser = artisanRepository.findByEmail(email);
                 if (isOldUser.isEmpty() && role == null ){
                     throw new IllegalStateException("Not a registered artisan");
+                }
+                else if(isOldUser.isPresent() && role == null){
+                    return jwtUtility.generateToken(isOldUser.get());
                 }
                 else if (isOldUser.isEmpty() && role.getRole() != null) {
                     String pictureUrl = (String) payload.get("picture");
@@ -108,9 +108,10 @@ public class LoginService {
                     newArtisan.setEnabled(true);
                     return jwtUtility.generateToken(newArtisan);
                 }
-                else if(isOldUser.get().getAuthprovider() == AUTHPROVIDER.GOOGLE){
-                    return jwtUtility.generateToken(isOldUser.get());
+                else if(isOldUser.isPresent() && role.getRole() != null ){
+                    throw new IllegalStateException("User already registered, please log in");
                 }
+
                 else{
                     throw new IllegalStateException("Unknown user");
                 }
