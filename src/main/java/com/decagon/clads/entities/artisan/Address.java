@@ -17,10 +17,8 @@ public class Address  {
     @NotEmpty
     @Size(min=3)
     private String street;
-    @NotEmpty
-    @Size(min=3)
     private String city;
-    @NotEmpty
-    @Size(min=3)
     private String state;
+    private String longitude;
+    private String latitude;
 }
