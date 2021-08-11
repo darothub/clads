@@ -57,14 +57,18 @@ public class Artisan implements UserDetails {
     @AttributeOverrides({
             @AttributeOverride(name = "street", column = @Column(name = "work_street")),
             @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-            @AttributeOverride(name = "state", column = @Column(name = "work_state"))
+            @AttributeOverride(name = "state", column = @Column(name = "work_state")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "work_longitude")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "work_latitude"))
     })
     private Address workshopAddress;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "street", column = @Column(name = "show_room_street")),
             @AttributeOverride(name = "city", column = @Column(name = "show_room_city")),
-            @AttributeOverride(name = "state", column = @Column(name = "show_room_state"))
+            @AttributeOverride(name = "state", column = @Column(name = "show_room_state")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "show_room_longitude")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "show_room_latitude"))
     })
     private Address showroomAddress;
     private int noOfEmployees;
@@ -72,7 +76,8 @@ public class Artisan implements UserDetails {
             @AttributeOverride(name = "name", column = @Column(name = "assoc_name")),
             @AttributeOverride(name = "ward", column = @Column(name = "assoc_ward")),
             @AttributeOverride(name = "lga", column = @Column(name = "assoc_lga")),
-            @AttributeOverride(name = "state", column = @Column(name = "assoc_state"))
+            @AttributeOverride(name = "state", column = @Column(name = "assoc_state")),
+
     })
     @Embedded
     @Valid
