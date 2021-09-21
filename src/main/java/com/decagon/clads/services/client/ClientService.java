@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class ClientService {
             throw new IllegalStateException("Client already exist");
         }
         client.setArtisanId(JwtFilter.userId);
+        client.setCreatedAt(LocalDateTime.now());
         return clientRepository.save(client);
     }
 
@@ -97,7 +99,7 @@ public class ClientService {
 
     public Client editClientById(Client client, String id) {
        try{
-           Long clientId = (long) Integer.parseInt(id);
+           long clientId =  Integer.parseInt(id);
            client.setId(clientId);
            Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
            if(isOldClientWithPhoneNumberAndEmail.size() > 1){

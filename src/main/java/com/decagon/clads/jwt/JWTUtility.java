@@ -25,7 +25,7 @@ public class JWTUtility implements Serializable {
 
     private static final long serialVersionUID = 234234523523L;
 
-    public static final long JWT_TOKEN_VALIDITY = 31540000000L;
+    public static final long JWT_TOKEN_VALIDITY = 24*60*60*1000L;
 
 
     @Value("${jwt.secret}")
@@ -80,7 +80,7 @@ public class JWTUtility implements Serializable {
     //generate token for user
     public String generateToken(Artisan artisan) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", artisan.getId());
+        claims.put("role", artisan.getRole());
         return doGenerateToken(claims, artisan.getUsername());
     }
 

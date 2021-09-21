@@ -11,6 +11,7 @@ import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.repositories.ArtisanRepository;
 import com.decagon.clads.utils.AUTHPROVIDER;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,8 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 @CacheConfig(cacheNames = {"artisan"})
@@ -90,7 +90,7 @@ public class ArtisanService implements UserDetailsService {
             return token;
         }
         else {
-            ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.toString(), String.format("%s already taken", artisan.getEmail()));
+            ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.toString(), Optional.of(String.format("%s already taken", artisan.getEmail())));
             throw new CustomException(error);
         }
     }

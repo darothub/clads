@@ -4,10 +4,7 @@ import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.response.ErrorResponse;
 import com.decagon.clads.services.ArtisanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -29,7 +26,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Data
 @NoArgsConstructor
@@ -39,14 +39,7 @@ import java.util.regex.Pattern;
 public class JwtFilter extends OncePerRequestFilter {
 
     private JWTUtility jwtUtility;
-
     private ArtisanService artisanService;
-
-    @Autowired
-    public JwtFilter(JWTUtility jwtUtility, ArtisanService artisanService){
-        this.artisanService = artisanService;
-        this.jwtUtility = jwtUtility;
-    }
 
     public static String  token = null;
     public static String userName = null;
@@ -55,18 +48,18 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 //        log.info("jwt filter");
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(AUTHORIZATION);
 
         try{
             if (null != authorization && authorization.startsWith("Bearer ")) {
-                token = authorization.substring(7);
+                token = authorization.substring("Bearer ".length()); 
                 userName = jwtUtility.getEmailAddressFromToken(token);
                 userId = jwtUtility.getIdFromToken(token);
             }
             else{
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), "You are not authorized");
+                ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), Optional.of("You are not authorized"));
                 final ObjectMapper mapper = new ObjectMapper();
                 mapper.writeValue(response.getOutputStream(), error);
             }
@@ -75,17 +68,14 @@ public class JwtFilter extends OncePerRequestFilter {
         catch (Exception e){
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), e.getMessage());
+            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), Optional.of(e.getMessage()));
 
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
         }
         try{
             if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                log.info("token "+token + "\n");
-
                 UserDetails userDetails = artisanService.loadUserByUsername(userName);
-//                log.info("UserDTO {}{}", userDetails, userDetails.getPassword());
                 if (jwtUtility.validateToken(token, userDetails)) {
 
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -106,8 +96,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ErrorResponse error = new ErrorResponse(response.getStatus(), String.valueOf(response.getStatus()), e.getLocalizedMessage());
-
+            ErrorResponse error = new ErrorResponse(response.getStatus(), String.valueOf(response.getStatus()), Optional.of(e.getLocalizedMessage()));
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
         }
