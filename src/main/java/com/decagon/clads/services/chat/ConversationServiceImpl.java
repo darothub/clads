@@ -28,6 +28,6 @@ public class ConversationServiceImpl implements ConversationService{
 
     @Override
     public Collection<Conversation> getUserConversations() {
-        return conversationRepository.getConversationAndMessages(1);
+        return conversationRepository.getConversationAndMessages(JwtFilter.userId);
     }
 }

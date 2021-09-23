@@ -1,5 +1,6 @@
 package com.decagon.clads.entities.chat;
 
+import com.decagon.clads.filter.JwtFilter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private long senderId;
+    private long senderId = JwtFilter.userId;
     private long receiverId;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)

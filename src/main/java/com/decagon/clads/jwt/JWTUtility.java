@@ -81,6 +81,7 @@ public class JWTUtility implements Serializable {
     public String generateToken(Artisan artisan) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", artisan.getRole());
+        claims.put("id", artisan.getId());
         return doGenerateToken(claims, artisan.getUsername());
     }
 
@@ -90,7 +91,7 @@ public class JWTUtility implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact();
+                .signWith(SignatureAlgorithm.HS256, secretKey).compact();
     }
 
     //validate token

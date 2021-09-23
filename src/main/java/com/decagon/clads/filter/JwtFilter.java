@@ -32,14 +32,13 @@ import java.util.regex.Pattern;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Data
-@NoArgsConstructor
 @Component
 @Slf4j
 @EqualsAndHashCode(callSuper = false)
 public class JwtFilter extends OncePerRequestFilter {
 
-    private JWTUtility jwtUtility;
-    private ArtisanService artisanService;
+    private final JWTUtility jwtUtility;
+    private final ArtisanService artisanService;
 
     public static String  token = null;
     public static String userName = null;
@@ -68,8 +67,7 @@ public class JwtFilter extends OncePerRequestFilter {
         catch (Exception e){
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), Optional.of(e.getMessage()));
-
+            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), e.getMessage());
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
         }
@@ -96,7 +94,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            ErrorResponse error = new ErrorResponse(response.getStatus(), String.valueOf(response.getStatus()), Optional.of(e.getLocalizedMessage()));
+            ErrorResponse error = new ErrorResponse(response.getStatus(), String.valueOf(response.getStatus()), e.getLocalizedMessage());
             final ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(response.getOutputStream(), error);
         }
@@ -106,6 +104,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home|download/image/*|conversation|message)").matcher(path).find();
+        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home|download/image/*)").matcher(path).find();
     }
 }
