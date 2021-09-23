@@ -37,6 +37,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-configuration-processor:2.2.6.RELEASE")
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine'
+    //ably
+    implementation 'io.ably:ably-java:1.2.0'
 
 
 }

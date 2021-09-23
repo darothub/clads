@@ -24,7 +24,7 @@ public class ConfirmationToken {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
-    @ManyToOne
+    @OneToOne
     @JoinColumns({
             @JoinColumn(name="artisan_id", referencedColumnName="id"),
             @JoinColumn(name="artisan_email", referencedColumnName="email")
