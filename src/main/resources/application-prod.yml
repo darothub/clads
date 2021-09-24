@@ -45,7 +45,8 @@ spring:
 jwt:
   header: Authorization
   secret: secretkey123
-
+ably:
+  apiKey: ei07cg.g3KPQQ:Xj8QeTGYAe2izc8J
 host:
   base: https://clads-service.herokuapp.com/api/v1/
 

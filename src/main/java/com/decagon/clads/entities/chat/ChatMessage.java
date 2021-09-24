@@ -25,7 +25,7 @@ public class ChatMessage {
     @JoinColumn(name = "conversation_id")
     @JsonBackReference
     private Conversation conversation;
-
+    private String chatName;
 //    public Conversation getConversation() {
 //        return conversation;
 //    }

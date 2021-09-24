@@ -22,11 +22,6 @@ public class ConversationServiceImpl implements ConversationService{
     private final ChatMessageRepository chatMessageRepository;
 
     @Override
-    public Conversation addConversation(Conversation conversation) {
-        return conversationRepository.save(conversation);
-    }
-
-    @Override
     public Collection<Conversation> getUserConversations() {
         return conversationRepository.getConversationAndMessages(JwtFilter.userId);
     }

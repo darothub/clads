@@ -23,11 +23,7 @@ import java.util.Collection;
 public class ConversationController {
     private final SuccessResponseHandler successResponseHandler;
     private final ConversationServiceImpl conversationService;
-    @PostMapping(path = "/conversations")
-    public ResponseEntity<ResponseModel> postMessage(@Valid @RequestBody Conversation conversation) {
-        Conversation c = conversationService.addConversation(conversation);
-        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, conversation);
-    }
+
     @GetMapping(path = "/conversations")
     public ResponseEntity<ResponseModel> getUserConversations() {
         Collection <Conversation> c = conversationService.getUserConversations();
