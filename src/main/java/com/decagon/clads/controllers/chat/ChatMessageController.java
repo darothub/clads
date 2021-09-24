@@ -8,9 +8,11 @@ import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.services.chat.ChatMessageServiceImpl;
 import com.decagon.clads.services.chat.ConversationServiceImpl;
 import com.decagon.clads.utils.ConstantUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.rest.AblyRest;
+import io.ably.lib.types.AblyException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,11 @@ public class ChatMessageController {
 
     private final SuccessResponseHandler successResponseHandler;
     private final ChatMessageServiceImpl chatMessageService;
+    private final Channel channel;
 
 
     @PostMapping(path = "/message")
-    public ResponseEntity<ResponseModel> postMessage(@Valid @RequestBody ChatMessage chatMessage) {
+    public ResponseEntity<ResponseModel> postMessage(@Valid @RequestBody ChatMessage chatMessage) throws AblyException, JsonProcessingException {
         ChatMessage c = chatMessageService.addChatMessage(chatMessage);
         return successResponseHandler.handleSuccessResponseEntity("Message added successfully", HttpStatus.OK, c);
     }

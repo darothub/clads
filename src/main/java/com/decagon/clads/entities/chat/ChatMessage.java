@@ -6,19 +6,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Data
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private long senderId = JwtFilter.userId;
+    private long senderId = 1;
     private long receiverId;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,11 +28,4 @@ public class ChatMessage {
     @JsonBackReference
     private Conversation conversation;
     private String chatName;
-//    public Conversation getConversation() {
-//        return conversation;
-//    }
-//
-//    public void setConversation(Conversation conversation) {
-//        this.conversation = conversation;
-//    }
 }

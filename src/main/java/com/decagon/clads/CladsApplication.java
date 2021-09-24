@@ -2,6 +2,12 @@ package com.decagon.clads;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.ably.lib.realtime.AblyRealtime;
+import io.ably.lib.realtime.Channel;
+import io.ably.lib.types.AblyException;
+import io.ably.lib.types.Message;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,15 +24,19 @@ import java.util.concurrent.Executor;
 @EnableCaching
 public class CladsApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AblyException {
 
         SpringApplication.run(CladsApplication.class, args);
     }
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
-
+    @Bean
+    public ObjectMapper mapper() {
+        return new ObjectMapper();
+    }
     @Bean
     public Executor executor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -37,4 +47,5 @@ public class CladsApplication {
         executor.initialize();
         return executor;
     }
+
 }
