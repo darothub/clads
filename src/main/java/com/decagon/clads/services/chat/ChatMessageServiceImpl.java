@@ -33,7 +33,7 @@ public class ChatMessageServiceImpl implements ChatMessageService{
 
     @Override
     public ChatMessage addChatMessage(ChatMessage chatMessage) throws AblyException, JsonProcessingException {
-        String topic = chatMessage.getReceiverId() + chatMessage.getSenderId() + channelName;
+        String topic = String.valueOf(chatMessage.getReceiverId());
         if (chatMessage.getConversation() == null){
            Conversation c = conversationRepository.findConversationById(chatMessage.getReceiverId(), chatMessage.getSenderId());
            if(c != null){
@@ -58,5 +58,12 @@ public class ChatMessageServiceImpl implements ChatMessageService{
         conversationRepository.save(oldConvo.get());
         channel.publish(chatMessage.getChatName(), mapper.writeValueAsString(chatMessage));
         return chatMessage;
+    }
+
+    private String chatNameAlgo(int a, int b){
+        String res = "";
+        res = res + Math.min(a, b);
+        res = res + Math.max(a, b);
+        return res+channelName;
     }
 }
