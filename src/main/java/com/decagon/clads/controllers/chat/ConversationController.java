@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -27,6 +28,6 @@ public class ConversationController {
     @GetMapping(path = "/conversations")
     public ResponseEntity<ResponseModel> getUserConversations() {
         Collection <Conversation> c = conversationService.getUserConversations();
-        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, c);
+        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(c));
     }
 }

@@ -28,7 +28,6 @@ import java.util.Set;
 @Slf4j
 public class ClientService {
     private final ClientRepository clientRepository;
-    private final ModelMapper modelMapper;
     private final ErrorResponse errorResponse;
     public Client addClient(Client client){
         Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
@@ -75,7 +74,7 @@ public class ClientService {
         }
     }
     public Client getSingleClient(String id) {
-        Long clientId = (long) Integer.parseInt(id);
+        long clientId = Integer.parseInt(id);
         Optional<Client> client =  clientRepository.findById(clientId);
         if (client.isEmpty()){
             errorResponse.setMessage("Client with "+id+" is not found");
@@ -86,14 +85,8 @@ public class ClientService {
     }
 
     public String deleteClientById(String id) {
-        Long clientId = (long) Integer.parseInt(id);
-        Optional<Client> client = clientRepository.findById(clientId);
-        if (client.isEmpty()){
-            errorResponse.setMessage("Client with "+id+" is not found");
-            errorResponse.setStatus(HttpStatus.SC_NOT_FOUND);
-            throw new CustomException(errorResponse);
-        }
-        clientRepository.delete(client.get());
+        Client client = getSingleClient(id);
+        clientRepository.delete(client);
         return "Client deleted successfully";
     }
 
@@ -107,6 +100,7 @@ public class ClientService {
                errorResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
                throw new CustomException(errorResponse);
            }
+           client.setUpdateAt(LocalDateTime.now());
            return clientRepository.save(client);
        }
        catch (Exception e){

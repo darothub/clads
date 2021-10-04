@@ -2,6 +2,7 @@ package com.decagon.clads;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.ably.lib.realtime.AblyRealtime;
 import io.ably.lib.realtime.Channel;
 import io.ably.lib.types.AblyException;
@@ -18,6 +19,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.Executor;
 
 @SpringBootApplication
@@ -35,7 +37,9 @@ public class CladsApplication {
     }
     @Bean
     public ObjectMapper mapper() {
-        return new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        return mapper;
     }
     @Bean
     public Executor executor() {
@@ -46,6 +50,10 @@ public class CladsApplication {
         executor.setThreadNamePrefix("Darot-");
         executor.initialize();
         return executor;
+    }
+    @PostConstruct
+    public void setUp() {
+        mapper().registerModule(new JavaTimeModule());
     }
 
 }

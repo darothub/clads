@@ -28,10 +28,12 @@ dependencies {
     implementation 'com.auth0:java-jwt:3.18.1'
     implementation 'com.google.api-client:google-api-client:1.31.2'
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
     implementation 'org.modelmapper:modelmapper:2.3.5'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation("org.springframework.boot:spring-boot-configuration-processor:2.2.6.RELEASE")

@@ -28,7 +28,6 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     private String channelName;
     private final ObjectMapper mapper;
     private final Channel channel;
-    private final ChatMessageRepository chatMessageRepository;
     private final ConversationRepository conversationRepository;
 
     @Override
@@ -60,10 +59,4 @@ public class ChatMessageServiceImpl implements ChatMessageService{
         return chatMessage;
     }
 
-    private String chatNameAlgo(int a, int b){
-        String res = "";
-        res = res + Math.min(a, b);
-        res = res + Math.max(a, b);
-        return res+channelName;
-    }
 }

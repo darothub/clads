@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -32,19 +33,19 @@ public class ClientController {
     @PostMapping(path = "/client")
     public ResponseEntity<ResponseModel> addClient(@Valid @RequestBody Client client) {
         Client client1 = clientService.addClient(client);
-        return successResponseHandler.handleSuccessResponseEntity("Client added successfully", HttpStatus.OK, client1);
+        return successResponseHandler.handleSuccessResponseEntity("Client added successfully", HttpStatus.OK, Optional.of(client1));
     }
 
     @GetMapping(path = "/clients")
     public ResponseEntity<ResponseModel> getClients() {
         Collection<Client> clients = clientService.getClients();
-        return successResponseHandler.handleSuccessResponseEntity("Clients", HttpStatus.OK, clients);
+        return successResponseHandler.handleSuccessResponseEntity("Clients", HttpStatus.OK, Optional.of(clients));
     }
     @GetMapping(path = "/client/{id}")
     public ResponseEntity<ResponseModel> getClientById(@PathVariable String id)  {
 
         Client client = clientService.getSingleClient(id);
-        return successResponseHandler.handleSuccessResponseEntity("Client", HttpStatus.OK, client);
+        return successResponseHandler.handleSuccessResponseEntity("Client", HttpStatus.OK, Optional.of(client));
     }
     @DeleteMapping(path = "/client/{id}")
     public ResponseEntity<ResponseModel> deleteClientById(@PathVariable String id)  {
@@ -54,16 +55,16 @@ public class ClientController {
     @PutMapping(path = "/client/{id}")
     public ResponseEntity<ResponseModel> editClientById(@Valid @RequestBody Client client, @PathVariable String id)  {
         Client client1 = clientService.editClientById(client,id);
-        return successResponseHandler.handleSuccessResponseEntity("Client details updated", HttpStatus.OK, client1);
+        return successResponseHandler.handleSuccessResponseEntity("Client details updated", HttpStatus.OK, Optional.of(client1));
     }
     @PostMapping(path = "/client/{id}/delivery-address")
     public ResponseEntity<ResponseModel> addDeliveryAddress(@Valid @RequestBody Address address, @PathVariable String id) {
         String response = clientService.addDeliveryAddress(address, id);
-        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, "Client updated successfully");
+        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, Optional.empty());
     }
     @PostMapping(path = "/client/{id}/measurements")
     public ResponseEntity<ResponseModel> addMeasurements(@Valid @RequestBody Set<Measurement> measurement, @PathVariable String id) {
         String response = clientService.addMeasurements(measurement, id);
-        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, "Client updated successfully");
+        return successResponseHandler.handleSuccessResponseEntity(response, HttpStatus.OK, Optional.empty());
     }
 }

@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Component
 @EqualsAndHashCode(callSuper = false)
-
-public class ErrorResponse extends ResponseModel {
+public class ErrorResponse  {
     private int status;
     private String message;
     private Object payload;

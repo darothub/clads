@@ -1,6 +1,8 @@
 package com.decagon.clads.entities.token;
 
 import com.decagon.clads.entities.artisan.Artisan;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonSerialize(using = LocalDateTimeSerializer.class)
 public class ConfirmationToken {
 
     @Id

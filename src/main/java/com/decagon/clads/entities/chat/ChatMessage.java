@@ -20,7 +20,7 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private long senderId = 1;
+    private long senderId;
     private long receiverId;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)

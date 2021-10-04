@@ -2,6 +2,7 @@ package com.decagon.clads.entities.artisan;
 
 import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

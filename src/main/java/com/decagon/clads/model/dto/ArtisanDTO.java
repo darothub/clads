@@ -3,6 +3,7 @@ package com.decagon.clads.model.dto;
 import com.decagon.clads.entities.artisan.Address;
 import com.decagon.clads.entities.artisan.Association;
 import com.decagon.clads.entities.artisan.MeasurementOption;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,12 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ArtisanDTO {
+    private long id;
     private String firstName;
     private String lastName;
+    private String otherName;
     private String role;
     private String thumbnail;
     private String email;

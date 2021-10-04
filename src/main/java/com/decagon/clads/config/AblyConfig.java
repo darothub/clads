@@ -29,14 +29,6 @@ public class AblyConfig {
     @Bean
     public Channel getChannel() throws AblyException {
         Channel channel = ablyRealtime().channels.get("cladchat");
-//        Channel.MessageListener listener;
-//        listener = new Channel.MessageListener() {
-//            @SneakyThrows
-//            @Override
-//            public void onMessage(Message message) {
-//                log.info("Message from phone {}", message.data);
-//            }};
-//        channel.subscribe("1", listener);
         return channel;
     }
     @Bean

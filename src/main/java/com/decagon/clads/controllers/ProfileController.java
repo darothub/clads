@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -23,12 +24,12 @@ public class ProfileController {
     @GetMapping(path = "/me/profile")
     public ResponseEntity<ResponseModel> getArtisanProfile() {
         ArtisanDTO artisan = profileService.getArtisanProfile();
-        return successResponseHandler.handleSuccessResponseEntity("Profile details", HttpStatus.OK, artisan);
+        return successResponseHandler.handleSuccessResponseEntity("Profile details", HttpStatus.OK, Optional.of(artisan));
     }
 
     @PutMapping(path = "/me/profile")
     public ResponseEntity<ResponseModel> updateArtisanProfile(@Valid @RequestBody Artisan artisan) {
         ArtisanDTO artisanDTO = profileService.updateArtisanProfile(artisan);
-        return successResponseHandler.handleSuccessResponseEntity("Profile updated successfully", HttpStatus.OK, artisanDTO);
+        return successResponseHandler.handleSuccessResponseEntity("Profile updated successfully", HttpStatus.OK, Optional.of(artisanDTO));
     }
 }

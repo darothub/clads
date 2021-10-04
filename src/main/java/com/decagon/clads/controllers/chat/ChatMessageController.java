@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -39,6 +40,6 @@ public class ChatMessageController {
     @PostMapping(path = "/message")
     public ResponseEntity<ResponseModel> postMessage(@Valid @RequestBody ChatMessage chatMessage) throws AblyException, JsonProcessingException {
         ChatMessage c = chatMessageService.addChatMessage(chatMessage);
-        return successResponseHandler.handleSuccessResponseEntity("Message added successfully", HttpStatus.OK, c);
+        return successResponseHandler.handleSuccessResponseEntity("Message added successfully", HttpStatus.OK, Optional.of(c));
     }
 }

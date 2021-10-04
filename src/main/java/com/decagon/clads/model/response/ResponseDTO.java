@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Component
 @EqualsAndHashCode(callSuper = false)
-public class SuccessResponse extends ResponseModel {
+public class ResponseDTO extends ResponseModel {
     private int status;
     private String message;
     private Object payload;

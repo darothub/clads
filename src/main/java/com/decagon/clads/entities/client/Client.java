@@ -51,4 +51,5 @@ public class Client  {
     private Set<Measurement> measurements = new HashSet<>();
     @Column(nullable = false)
     private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 }

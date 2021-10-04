@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -29,14 +30,14 @@ public class LoginController {
     public ResponseEntity<ResponseModel> login(@Valid @RequestBody LoginRequest loginRequest) {
 
         String token = loginService.loginService(loginRequest);
-        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, token);
+        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
     }
 
     @PostMapping(path = "/login/google")
     public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestBody(required = false) AuthRole role) {
 //        log.info("Herererer {}", auth);
         String token = loginService.loginWithGoogleService(auth, role);
-        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, token);
+        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
     }
 
 }

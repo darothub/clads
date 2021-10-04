@@ -1,22 +1,19 @@
 package com.decagon.clads.controllers;
 
 import com.decagon.clads.entities.artisan.Artisan;
-import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.dto.ArtisanDTO;
 import com.decagon.clads.model.response.ResponseModel;
-import com.decagon.clads.model.response.SuccessResponse;
 import com.decagon.clads.services.RegistrationService;
 import com.decagon.clads.utils.ConstantUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -42,11 +39,11 @@ public class RegistrationController {
     @GetMapping(path = "/confirm")
     public ResponseEntity<ResponseModel> confirm(@RequestParam("token") String token) {
         registrationService.confirmToken(token);
-        return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK, LocalDateTime.now());
+        return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK);
     }
 
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {
-        return successResponseHandler.handleSuccessResponseEntity(message, status, payload);
+        return successResponseHandler.handleSuccessResponseEntity(message, status, Optional.of(payload));
     }
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status) {
         return successResponseHandler.handleSuccessResponseEntity(message, status);

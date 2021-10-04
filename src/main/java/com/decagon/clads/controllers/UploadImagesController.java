@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -32,22 +33,22 @@ public class UploadImagesController {
     @PostMapping("/upload")
     public ResponseEntity<ResponseModel> uploadImageAndDescriptionToDb(@RequestPart("file") MultipartFile file, @RequestPart("description") String imageAndDescription) throws IOException {
         UploadImageDTO imageUploadDTO =  uploadService.uploadImagesAndDescriptionToDb(file, imageAndDescription);
-        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, imageUploadDTO);
+        return successResponseHandler.handleSuccessResponseEntity("Image uploaded successfully", HttpStatus.CREATED, Optional.of(imageUploadDTO));
     }
     @PatchMapping("/upload/{fileId}")
     public ResponseEntity<ResponseModel> editUploadedImageDescription(@RequestParam("description") String description, @PathVariable String fileId) throws IOException {
         UploadImageDTO imageUploadDTO =  uploadService.editUploadedImageDescription(description, fileId);
-        return successResponseHandler.handleSuccessResponseEntity("Image edited successfully", HttpStatus.OK, imageUploadDTO);
+        return successResponseHandler.handleSuccessResponseEntity("Image edited successfully", HttpStatus.OK, Optional.of(imageUploadDTO));
     }
     @DeleteMapping("/upload/{fileId}")
     public ResponseEntity<ResponseModel> deleteUploadedImageDescription(@PathVariable String fileId) throws IOException {
         uploadService.deleteUploadedImageDescription(fileId);
-        return successResponseHandler.handleSuccessResponseEntity("Image deleted successfully", HttpStatus.OK, null);
+        return successResponseHandler.handleSuccessResponseEntity("Image deleted successfully", HttpStatus.OK, Optional.empty());
     }
     @GetMapping("/images")
     public ResponseEntity<ResponseModel> downloadFile() throws IOException {
         Collection<UploadImageDTO> uploadImage = uploadService.downloadImage();
-        return successResponseHandler.handleSuccessResponseEntity("Images", HttpStatus.OK, uploadImage);
+        return successResponseHandler.handleSuccessResponseEntity("Images", HttpStatus.OK, Optional.of(uploadImage));
     }
 
     @Transactional

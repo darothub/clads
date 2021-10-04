@@ -34,7 +34,6 @@ public class RegistrationService {
     @Cacheable
     public CompletableFuture<Object> register(Artisan artisan) {
         ArtisanDTO artisanDTO = modelMapper.map(artisan, ArtisanDTO.class);
-        log.info("Thread {}", Thread.currentThread());
         return CompletableFuture.supplyAsync(() -> artisanService.signUpArtisan(artisan)).handle((res, e)->{
 
             if(e != null){
@@ -42,7 +41,6 @@ public class RegistrationService {
                 throw new CustomException(errorResponse);
             }
             String link = String.format(constantUtils.host+"confirm?token=%s", res);
-//            log.info("Thread2 {}", Thread.currentThread());
             emailSender.send(artisanDTO.getEmail(), emailSender.buildEmail(artisanDTO.getFirstName(), link));
             return res;
         });
