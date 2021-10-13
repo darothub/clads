@@ -3,6 +3,7 @@ package com.decagon.clads.services.chat;
 import com.decagon.clads.config.AblyConfig;
 import com.decagon.clads.entities.chat.ChatMessage;
 import com.decagon.clads.entities.chat.Conversation;
+import com.decagon.clads.filter.JwtFilter;
 import com.decagon.clads.repositories.chat.ChatMessageRepository;
 import com.decagon.clads.repositories.chat.ConversationRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,9 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -32,14 +36,16 @@ public class ChatMessageServiceImpl implements ChatMessageService{
 
     @Override
     public ChatMessage addChatMessage(ChatMessage chatMessage) throws AblyException, JsonProcessingException {
-        String topic = String.valueOf(chatMessage.getReceiverId());
+        chatMessage.setSenderId(JwtFilter.userName);
+        String topic = Stream.of(chatMessage.getReceiverId(), chatMessage.getSenderId()).sorted().collect(Collectors.joining());
+        chatMessage.setChatName(topic);
         if (chatMessage.getConversation() == null){
            Conversation c = conversationRepository.findConversationById(chatMessage.getReceiverId(), chatMessage.getSenderId());
+
            if(c != null){
                c.addMessage(chatMessage);
                Conversation updated = conversationRepository.save(c);
                ChatMessage newChatMessage = updated.getMessages().get(updated.getMessages().size()-1);
-               newChatMessage.setChatName(topic);
                channel.publish(newChatMessage.getChatName(), mapper.writeValueAsString(newChatMessage));
                return newChatMessage;
             }
@@ -48,7 +54,6 @@ public class ChatMessageServiceImpl implements ChatMessageService{
            newConvo.setUser2Id(chatMessage.getReceiverId());
            newConvo.addMessage(chatMessage);
            conversationRepository.save(newConvo);
-           chatMessage.setChatName(topic);
            channel.publish(chatMessage.getChatName(),mapper.writeValueAsString(chatMessage));
            return chatMessage;
         }

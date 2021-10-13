@@ -17,7 +17,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
     @Transactional
     @Modifying
     @Query("SELECT c FROM Conversation c WHERE c.user1Id = ?1 OR c.user2Id = ?1")
-    Collection<Conversation> getConversationAndMessages(long id);
+    Collection<Conversation> getConversationAndMessages(String id);
 
     @Transactional
     @Query("SELECT m.conversation FROM ChatMessage m WHERE " +

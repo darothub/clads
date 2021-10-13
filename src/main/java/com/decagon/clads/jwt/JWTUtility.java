@@ -31,7 +31,7 @@ public class JWTUtility implements Serializable {
     @Value("${jwt.secret}")
     public String secretKey;
 
-    //retrieve username from jwt token
+    //retrieve email from jwt token
     public String getEmailAddressFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
