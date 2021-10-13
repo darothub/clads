@@ -22,6 +22,6 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
     @Transactional
     @Query("SELECT m.conversation FROM ChatMessage m WHERE " +
             "(m.receiverId = ?1 OR m.senderId = ?1) AND (m.senderId = ?2 OR m.receiverId = ?2) ")
-    Conversation findConversationById(long receiverId, long senderId);
+    Conversation findConversationById(String receiverId, String senderId);
 
 }

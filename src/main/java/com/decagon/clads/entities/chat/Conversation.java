@@ -22,8 +22,8 @@ public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private long user1Id;
-    private long user2Id;
+    private String user1Id;
+    private String user2Id;
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ChatMessage> messages = new ArrayList<>();

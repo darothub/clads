@@ -20,8 +20,8 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private long senderId;
-    private long receiverId;
+    private String senderId;
+    private String receiverId;
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conversation_id")
