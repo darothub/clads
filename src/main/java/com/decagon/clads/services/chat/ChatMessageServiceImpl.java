@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +34,7 @@ public class ChatMessageServiceImpl implements ChatMessageService{
     @Override
     public ChatMessage addChatMessage(ChatMessage chatMessage) throws AblyException, JsonProcessingException {
         chatMessage.setSenderId(JwtFilter.userName);
-        String topic = Stream.of(chatMessage.getReceiverId(), chatMessage.getSenderId()).sorted().collect(Collectors.joining());
+        String topic = chatMessage.getReceiverId();
         chatMessage.setChatName(topic);
         if (chatMessage.getConversation() == null){
            Conversation c = conversationRepository.findConversationById(chatMessage.getReceiverId(), chatMessage.getSenderId());

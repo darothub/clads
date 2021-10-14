@@ -20,7 +20,6 @@ public class AblyConfig {
     @Bean
     public AblyRealtime ablyRealtime() {
         try {
-
             return new AblyRealtime(apiKey);
         } catch (AblyException exception) {
             return null;
@@ -29,6 +28,14 @@ public class AblyConfig {
     @Bean
     public Channel getChannel() throws AblyException {
         Channel channel = ablyRealtime().channels.get("cladchat");
+//        Channel.MessageListener m = new Channel.MessageListener() {
+//            @Override
+//            public void onMessage(Message message) {
+//                log.info("Ably Message {}", message);
+//            }
+//        };
+//        String[] nodes = {"1", "3"};
+//        channel.subscribe(nodes, m);
         return channel;
     }
     @Bean
