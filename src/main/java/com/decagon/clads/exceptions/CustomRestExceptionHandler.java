@@ -186,6 +186,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         error.setPayload(errors);
     }
 
+
     private ResponseEntity<Object> errorHandlerController(Exception ex, HttpStatus status) {
         error.setMessage(status.toString());
         error.setStatus(status.value());

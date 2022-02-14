@@ -1,16 +1,11 @@
 package com.decagon.clads.jwt;
 
-import com.decagon.clads.entities.artisan.Artisan;
-import com.decagon.clads.model.dto.ArtisanDTO;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
+import com.decagon.clads.artisans.entities.Artisan;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 

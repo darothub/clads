@@ -16,7 +16,7 @@ spring:
       write_dates_as_timestamps: false
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -50,3 +50,4 @@ ably:
   channel: cladchat
 host:
   base: http://localhost:8080/api/v1/
+

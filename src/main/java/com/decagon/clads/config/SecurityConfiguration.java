@@ -1,7 +1,7 @@
 package com.decagon.clads.config;
 
 import com.decagon.clads.filter.JwtFilter;
-import com.decagon.clads.services.ArtisanService;
+import com.decagon.clads.artisans.services.auth.ArtisanService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,14 +1,13 @@
 package com.decagon.clads.model.dto;
 
-import com.decagon.clads.entities.artisan.Address;
-import com.decagon.clads.entities.artisan.Association;
-import com.decagon.clads.entities.artisan.MeasurementOption;
+import com.decagon.clads.artisans.entities.Address;
+import com.decagon.clads.artisans.entities.Association;
+import com.decagon.clads.artisans.entities.MeasurementOption;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
 import java.util.HashSet;
 import java.util.Set;
 

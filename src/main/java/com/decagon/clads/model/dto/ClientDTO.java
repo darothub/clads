@@ -1,7 +1,7 @@
 package com.decagon.clads.model.dto;
 
-import com.decagon.clads.entities.artisan.Address;
-import com.decagon.clads.entities.client.Measurement;
+import com.decagon.clads.artisans.entities.Address;
+import com.decagon.clads.artisans.entities.Measurement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

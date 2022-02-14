@@ -2,24 +2,18 @@ package com.decagon.clads.filter;
 
 import com.decagon.clads.jwt.JWTUtility;
 import com.decagon.clads.model.response.ErrorResponse;
-import com.decagon.clads.services.ArtisanService;
+import com.decagon.clads.artisans.services.auth.ArtisanService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -104,6 +98,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home|download/image/*)").matcher(path).find();
+        return Pattern.compile("/api/v1/(artisans/register|confirm|login|login/google|home|download/image/*|message|conversations)").matcher(path).find();
     }
 }
