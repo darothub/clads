@@ -13,9 +13,11 @@ import org.apache.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -24,12 +26,15 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final ErrorResponse errorResponse;
     public Client addClient(Client client){
-        Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
+        Optional<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail());
         log.info("Existed number {}", isOldClientWithPhoneNumberAndEmail);
-        if (!isOldClientWithPhoneNumberAndEmail.isEmpty()){
-            throw new IllegalStateException("Client already exist");
+        if (isOldClientWithPhoneNumberAndEmail.isPresent()){
+            Client isAlreadyAdded = isOldClientWithPhoneNumberAndEmail.get();
+            isAlreadyAdded.getArtisanId().add(JwtFilter.userId);
+            isAlreadyAdded.setUpdateAt(LocalDateTime.now());
+            return isAlreadyAdded;
         }
-        client.setArtisanId(JwtFilter.userId);
+        client.getArtisanId().add(JwtFilter.userId);
         client.setCreatedAt(LocalDateTime.now());
         return clientRepository.save(client);
     }
@@ -88,12 +93,6 @@ public class ClientService {
        try{
            long clientId =  Integer.parseInt(id);
            client.setId(clientId);
-           Collection<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail(), JwtFilter.userId);
-           if(isOldClientWithPhoneNumberAndEmail.size() > 1){
-               errorResponse.setMessage("Incoming details has duplicates with another client, see administrator");
-               errorResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
-               throw new CustomException(errorResponse);
-           }
            client.setUpdateAt(LocalDateTime.now());
            return clientRepository.save(client);
        }

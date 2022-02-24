@@ -1,10 +1,10 @@
 package com.decagon.clads.artisans.controllers;
 
-import com.decagon.clads.artisans.entities.AuthRole;
 import com.decagon.clads.model.request.LoginRequest;
 import com.decagon.clads.model.response.ResponseModel;
 import com.decagon.clads.artisans.services.auth.LoginService;
 import com.decagon.clads.utils.ConstantUtils;
+import com.decagon.clads.utils.Role;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,13 +23,12 @@ public class LoginController {
     private final LoginService loginService;
     @PostMapping(path = "/login")
     public ResponseEntity<ResponseModel> login(@Valid @RequestBody LoginRequest loginRequest) {
-
         String token = loginService.loginService(loginRequest);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
     }
 
     @PostMapping(path = "/login/google")
-    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestBody(required = false) AuthRole role) {
+    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestBody(required = false) Role role) {
 //        log.info("Herererer {}", auth);
         String token = loginService.loginWithGoogleService(auth, role);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));

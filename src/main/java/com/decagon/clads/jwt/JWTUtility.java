@@ -1,6 +1,7 @@
 package com.decagon.clads.jwt;
 
 import com.decagon.clads.artisans.entities.Artisan;
+import com.decagon.clads.model.dto.CladUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -41,6 +42,10 @@ public class JWTUtility implements Serializable {
         Claims claims = getAllClaimsFromToken(token);
         return Long.valueOf(String.valueOf(claims.get("id"))) ;
     }
+    public String getRoleFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return (String) claims.get("role");
+    }
     //retrieve username from jwt token
     public String getPasswordFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
@@ -73,11 +78,11 @@ public class JWTUtility implements Serializable {
 
 
     //generate token for user
-    public String generateToken(Artisan artisan) {
+    public  String generateToken(CladUser cladUser) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", artisan.getRole());
-        claims.put("id", artisan.getId());
-        return doGenerateToken(claims, artisan.getUsername());
+        claims.put("role", cladUser.getRole());
+        claims.put("id", cladUser.getId());
+        return doGenerateToken(claims, cladUser.getEmail());
     }
 
     //while creating the token -

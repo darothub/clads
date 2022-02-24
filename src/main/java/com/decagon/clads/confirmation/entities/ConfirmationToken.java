@@ -27,17 +27,11 @@ public class ConfirmationToken {
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
     private LocalDateTime confirmedAt;
-    @OneToOne
-    @JoinColumns({
-            @JoinColumn(name="artisan_id", referencedColumnName="id"),
-            @JoinColumn(name="artisan_email", referencedColumnName="email")
-    })
-    private Artisan artisan;
-
-    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, Artisan artisan){
+    private String email;
+    public ConfirmationToken(String token, LocalDateTime createdAt, LocalDateTime expiresAt, String email){
         this.token = token;
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        this.artisan = artisan;
+        this.email = email;
     }
 }

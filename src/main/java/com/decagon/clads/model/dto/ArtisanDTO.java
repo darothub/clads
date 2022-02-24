@@ -3,11 +3,13 @@ package com.decagon.clads.model.dto;
 import com.decagon.clads.artisans.entities.Address;
 import com.decagon.clads.artisans.entities.Association;
 import com.decagon.clads.artisans.entities.MeasurementOption;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArtisanDTO {
-    private long id;
+
     private String firstName;
     private String lastName;
     private String otherName;
@@ -36,6 +38,8 @@ public class ArtisanDTO {
     private String deliveryTime;
     private Set<String> paymentTerms = new HashSet<>();
     private Set<String> paymentOptions = new HashSet<>();
-
-
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
+    private LocalDateTime updateAt = LocalDateTime.now();
 }

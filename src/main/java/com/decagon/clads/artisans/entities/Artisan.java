@@ -1,7 +1,11 @@
 package com.decagon.clads.artisans.entities;
 
+import com.decagon.clads.model.dto.CladUser;
 import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
+import com.decagon.clads.utils.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +29,7 @@ import java.util.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @IdClass(ArtisanId.class)
+@Embeddable
 public class Artisan implements UserDetails {
     @Id
     @SequenceGenerator(name = "artisan_id_seq", sequenceName = "artisan_id_seq", allocationSize = 1)
@@ -38,9 +43,7 @@ public class Artisan implements UserDetails {
     private String lastName;
     private String otherName;
     @NotNull
-    @NotBlank
-    @Pattern(regexp = ConstantUtils.CATEGORY_PATTERN, message = "Invalid category")
-    private String role;
+    private Role role;
     private String password;
     private String thumbnail;
     @Id
@@ -99,7 +102,7 @@ public class Artisan implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AUTHPROVIDER authprovider = AUTHPROVIDER.REGULAR;
 
-    public Artisan(String firstName, String lastName, String otherName, String role, String thumbnail, String email, AUTHPROVIDER authprovider){
+    public Artisan(String firstName, String lastName, String otherName, Role role, String thumbnail, String email, AUTHPROVIDER authprovider){
         this.firstName = firstName;
         this.lastName = lastName;
         this.otherName = otherName;
@@ -111,7 +114,7 @@ public class Artisan implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.name());
         return Collections.singletonList(authority);
     }
 
@@ -129,9 +132,6 @@ public class Artisan implements UserDetails {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
 
     @Override
     public boolean isAccountNonExpired() {

@@ -1,9 +1,11 @@
 package com.decagon.clads.artisans.controllers;
 
-import com.decagon.clads.artisans.entities.Artisan;
+import com.decagon.clads.customer.entities.Client;
+import com.decagon.clads.customer.entities.ClientDTO;
 import com.decagon.clads.model.dto.ArtisanDTO;
+import com.decagon.clads.model.dto.CladUser;
 import com.decagon.clads.model.response.ResponseModel;
-import com.decagon.clads.artisans.services.auth.RegistrationService;
+import com.decagon.clads.artisans.services.auth.RegistrationServiceImpl;
 import com.decagon.clads.utils.ConstantUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @RequestMapping(path = ConstantUtils.BASE_URL)
 @Slf4j
 public class RegistrationController {
-    private final RegistrationService registrationService;
+    private final RegistrationServiceImpl registrationServiceImpl;
     private final SuccessResponseHandler successResponseHandler;
     private final ConstantUtils constantUtils;
     private final ObjectMapper objectMapper;
@@ -30,16 +32,23 @@ public class RegistrationController {
         log.info(constantUtils.host);
         return ResponseEntity.ok("Welcome to Clads home");
     }
-    @PostMapping("/artisans/register")
-    public ResponseEntity<ResponseModel> register(@Valid @RequestBody Artisan artisan) {
-        String token = (String) registrationService.register(artisan).join();
-        ArtisanDTO artisanDTO = objectMapper.convertValue(artisan, ArtisanDTO.class);
-        return handleSuccessResponseEntity("User added successfully", HttpStatus.CREATED, artisanDTO);
+    @PostMapping("/artisan/register")
+    public ResponseEntity<ResponseModel> register(@Valid @RequestBody CladUser cladUser) {
+        ArtisanDTO artisanDTO = registrationServiceImpl.registerArtisan(cladUser);
+        return handleSuccessResponseEntity("User created successfully", HttpStatus.CREATED, artisanDTO);
+    }
+    @PostMapping("/customer/register")
+    public ResponseEntity<ResponseModel> registerCustomer(@Valid @RequestBody CladUser cladUser) {
+        ClientDTO clientDTO = registrationServiceImpl.registerCustomer(cladUser);
+        return handleSuccessResponseEntity("User created successfully", HttpStatus.CREATED, clientDTO);
     }
     @GetMapping(path = "/confirm")
     public ResponseEntity<ResponseModel> confirm(@RequestParam("token") String token) {
-        registrationService.confirmToken(token);
-        return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK);
+        boolean confirmed = registrationServiceImpl.confirmToken(token);
+        if (confirmed){
+            return handleSuccessResponseEntity("Email successfully confirmed", HttpStatus.OK);
+        }
+        return handleSuccessResponseEntity("Email not confirmed", HttpStatus.BAD_GATEWAY);
     }
 
     public ResponseEntity<ResponseModel> handleSuccessResponseEntity(String message, HttpStatus status, Object payload) {

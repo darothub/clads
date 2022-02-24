@@ -27,7 +27,7 @@ public class ConfirmationTokenService {
     }
     public void updateConfirmationToken(ConfirmationToken confirmationToken){
         confirmationTokenRepository.updateConfirmationToken(
-                confirmationToken.getArtisan(),
+                confirmationToken.getEmail(),
                 confirmationToken.getCreatedAt(),
                 confirmationToken.getExpiresAt(),
                 confirmationToken.getToken()
