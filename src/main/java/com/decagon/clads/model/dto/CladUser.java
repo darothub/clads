@@ -44,7 +44,7 @@ public class CladUser  {
     private String password;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
     private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updateAt;
+    private LocalDateTime updateAt = LocalDateTime.now();
     private boolean locked;
     private boolean enabled;
 }

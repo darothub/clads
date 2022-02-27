@@ -3,6 +3,11 @@ server:
     include-binding-errors: always
     include-message: always
 spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
   datasource:
     username: ispaireqhaivvb
     password: e7330490e9ecba87cbacdc086de696f13a556ae2a337ab9cc7f0247721b73b3d

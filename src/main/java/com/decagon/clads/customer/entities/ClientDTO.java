@@ -32,7 +32,6 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientDTO {
-    private Set<Long> artisanId = new HashSet<>();
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -42,6 +41,7 @@ public class ClientDTO {
     private Set<Measurement> measurements = new HashSet<>();
     private AUTHPROVIDER authprovider = AUTHPROVIDER.REGULAR;
     @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
+    private LocalDateTime updateAt = LocalDateTime.now();
 }

@@ -47,30 +47,44 @@ public class LoginService {
     private final ConfirmationTokenService confirmationTokenService;
     private final ConstantUtils constantUtils;
     private final ObjectMapper objectMapper;
+
     private ErrorResponse errorResponse;
-    public String loginService(LoginRequest loginRequest){
+    public String loginArtisanService(LoginRequest loginRequest){
         Artisan artisan = artisanRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(()-> new IllegalStateException("Invalid username/password"));
-//        log.info("Artisan {}", artisan);
-        if(!artisan.isEnabled()){
-            String token = jwtUtility.generateToken(objectMapper.convertValue(artisan, CladUser.class));
+        return confirmUserAndGenerateToken(objectMapper.convertValue(artisan, CladUser.class), loginRequest);
+    }
+    public String loginCustomerService(LoginRequest loginRequest){
+        Client client = clientRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(()-> new IllegalStateException("Invalid username/password"));
+        return confirmUserAndGenerateToken(objectMapper.convertValue(client, CladUser.class), loginRequest);
+    }
+    private String confirmUserAndGenerateToken(CladUser cladUser, LoginRequest loginRequest) {
+        isUserEnabled(cladUser);
+        boolean verifyPassword = bCryptPasswordEncoder.matches(loginRequest.getPassword(), cladUser.getPassword());
+        if(verifyPassword){
+            return jwtUtility.generateToken(cladUser);
+        }
+        throw new IllegalStateException("Invalid username/password");
+    }
+
+    private void isUserEnabled(CladUser cladUser) {
+        if(!cladUser.isEnabled()){
+            String token = jwtUtility.generateToken(cladUser);
             ConfirmationToken confirmationToken = new ConfirmationToken(
                     token,
                     LocalDateTime.now(),
                     LocalDateTime.now().plusMinutes(15),
-                    artisan.getEmail()
+                    cladUser.getEmail()
             );
             confirmationTokenService.updateConfirmationToken(confirmationToken);
             String link = String.format(constantUtils.host+"confirm?token=%s", token);
-            emailSender.send(artisan.getEmail(), emailSender.buildEmail(artisan.getFirstName(), link));
+            emailSender.send(cladUser.getEmail(), emailSender.buildEmail(cladUser.getFirstName(), link));
             throw new IllegalStateException("Kindly verify your email address");
         }
-        boolean verifyPassword = bCryptPasswordEncoder.matches(loginRequest.getPassword(), artisan.getPassword());
-        if(verifyPassword){
-            return jwtUtility.generateToken(objectMapper.convertValue(artisan, CladUser.class));
-        }
-        throw new IllegalStateException("Invalid username/password");
     }
+
+
     @Transactional
     public String loginWithGoogleService(String auth, Role role){
         String token;
@@ -92,7 +106,7 @@ public class LoginService {
             token = auth.substring(7);
             log.info("Token {} role {}", token, role);
 
-            if (role.name().equals(Role.ARTISAN.name())){
+            if (role.name().equals(Role.TAILOR.name())){
                 return verifyArtisan(role, token, verifier);
             }
             return verifyCustomer(role, token, customerVerifier);

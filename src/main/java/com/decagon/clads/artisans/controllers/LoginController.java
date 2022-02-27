@@ -21,9 +21,14 @@ import java.util.Optional;
 public class LoginController {
     private final SuccessResponseHandler successResponseHandler;
     private final LoginService loginService;
-    @PostMapping(path = "/login")
-    public ResponseEntity<ResponseModel> login(@Valid @RequestBody LoginRequest loginRequest) {
-        String token = loginService.loginService(loginRequest);
+    @PostMapping(path = "/artisan/login")
+    public ResponseEntity<ResponseModel> loginArtisan(@Valid @RequestBody LoginRequest loginRequest) {
+        String token = loginService.loginArtisanService(loginRequest);
+        return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
+    }
+    @PostMapping(path = "/customer/login")
+    public ResponseEntity<ResponseModel> loginCustomer(@Valid @RequestBody LoginRequest loginRequest) {
+        String token = loginService.loginCustomerService(loginRequest);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
     }
 
