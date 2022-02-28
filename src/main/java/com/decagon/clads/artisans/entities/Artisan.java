@@ -102,13 +102,13 @@ public class Artisan implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AUTHPROVIDER authprovider = AUTHPROVIDER.REGULAR;
 
-    public Artisan(String firstName, String lastName, String otherName, Role role, String thumbnail, String email, AUTHPROVIDER authprovider){
+    public Artisan(String firstName, String lastName, String otherName, String email, Role role, String thumbnail, AUTHPROVIDER authprovider){
         this.firstName = firstName;
         this.lastName = lastName;
         this.otherName = otherName;
+        this.email = email;
         this.role = role;
         this.thumbnail = thumbnail;
-        this.email = email;
         this.authprovider = authprovider;
     }
 

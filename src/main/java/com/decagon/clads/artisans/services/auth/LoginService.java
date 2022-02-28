@@ -129,14 +129,21 @@ public class LoginService {
             else if(isOldUser.isPresent() && role == null){
                 return jwtUtility.generateToken((objectMapper.convertValue(isOldUser.get(), CladUser.class)));
             }
-            else if (isOldUser.isEmpty() && !role.name().isEmpty()) {
+            else if (isOldUser.isEmpty() && role.equals(Role.valueOf(Role.TAILOR.name()))) {
                 String pictureUrl = (String) payload.get("picture");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
-                Artisan artisan = new Artisan();
-//                    log.info("Artisan {}", artisan);
+                Artisan artisan = new Artisan(
+                        givenName,
+                        familyName,
+                        familyName,
+                        email,
+                        Role.CLIENT,
+                        pictureUrl,
+                        AUTHPROVIDER.GOOGLE
+                );
+                artisan.setEnabled(true);
                 Artisan newArtisan = artisanRepository.save(artisan);
-                newArtisan.setEnabled(true);
                 return jwtUtility.generateToken(objectMapper.convertValue(newArtisan, CladUser.class));
             }
             else if(isOldUser.isPresent() && !role.name().isEmpty() ){
@@ -154,25 +161,31 @@ public class LoginService {
         GoogleIdToken idToken = verifier.verify(token);
         if (null != idToken) {
             GoogleIdToken.Payload payload = idToken.getPayload();
-            log.info("IdToken {}", idToken);
             String email = idToken.getPayload().getEmail();
             Optional<Client> isOldUser = clientRepository.findByEmail(email);
             if (isOldUser.isEmpty() && role == null ){
                 throw new IllegalStateException("Not a registered user");
             }
             else if(isOldUser.isPresent() && role == null){
-                return "jwtUtility.generateToken(isOldUser.get())";
+                return jwtUtility.generateToken(objectMapper.convertValue(isOldUser.get(), CladUser.class));
             }
-            else if (isOldUser.isEmpty() && !role.name().isEmpty()) {
+            else if (isOldUser.isEmpty() && role.equals(Role.valueOf(Role.CLIENT.name()))) {
                 String pictureUrl = (String) payload.get("picture");
                 String familyName = (String) payload.get("family_name");
                 String givenName = (String) payload.get("given_name");
 
-                Client client = new Client();
-//                    log.info("Artisan {}", artisan);
+                Client client = new Client(
+                        givenName,
+                        familyName,
+                        email,
+                        Role.CLIENT,
+                        pictureUrl,
+                        AUTHPROVIDER.GOOGLE,
+                        LocalDateTime.now()
+                );
+                client.setEnabled(true);
                 Client newClient = clientRepository.save(client);
-                newClient.setEnabled(true);
-                return "jwtUtility.generateToken(newClient)";
+                return jwtUtility.generateToken(objectMapper.convertValue(newClient, CladUser.class));
             }
             else if(isOldUser.isPresent() && !role.name().isEmpty() ){
                 throw new IllegalStateException("User already registered, please log in");
