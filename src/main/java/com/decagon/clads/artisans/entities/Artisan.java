@@ -1,11 +1,8 @@
 package com.decagon.clads.artisans.entities;
 
-import com.decagon.clads.model.dto.CladUser;
 import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
 import com.decagon.clads.utils.Role;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,7 +25,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@IdClass(ArtisanId.class)
+@IdClass(JointEmailAndId.class)
 @Embeddable
 public class Artisan implements UserDetails {
     @Id

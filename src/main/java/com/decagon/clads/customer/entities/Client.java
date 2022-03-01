@@ -1,16 +1,13 @@
 package com.decagon.clads.customer.entities;
 
 import com.decagon.clads.artisans.entities.Address;
-import com.decagon.clads.artisans.entities.ArtisanId;
+import com.decagon.clads.artisans.entities.JointEmailAndId;
 import com.decagon.clads.artisans.entities.Measurement;
-import com.decagon.clads.model.dto.CladUser;
 import com.decagon.clads.utils.AUTHPROVIDER;
 import com.decagon.clads.utils.ConstantUtils;
 import com.decagon.clads.utils.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,10 +18,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -39,7 +34,7 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @EqualsAndHashCode(callSuper = false)
-@IdClass(ClientId.class)
+@IdClass(JointEmailAndId.class)
 public class Client implements UserDetails{
     @Id
     @SequenceGenerator(name = "client_sequence", sequenceName = "client_sequence", allocationSize = 1)

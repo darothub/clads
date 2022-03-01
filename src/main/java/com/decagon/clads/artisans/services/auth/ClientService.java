@@ -26,7 +26,7 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final ErrorResponse errorResponse;
     public Client addClient(Client client){
-        Optional<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findClientByPhoneNumberAndEmail(client.getPhoneNumber(), client.getEmail());
+        Optional<Client> isOldClientWithPhoneNumberAndEmail = clientRepository.findByEmail(client.getEmail());
         log.info("Existed number {}", isOldClientWithPhoneNumberAndEmail);
         if (isOldClientWithPhoneNumberAndEmail.isPresent()){
             Client isAlreadyAdded = isOldClientWithPhoneNumberAndEmail.get();

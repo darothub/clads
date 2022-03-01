@@ -157,7 +157,7 @@ public class LoginService {
             throw new IllegalStateException("IdToken is null");
         }
     }
-    private String verifyCustomer(Role role, String token, GoogleIdTokenVerifier verifier) throws GeneralSecurityException, IOException {
+    private String verifyCustomer(Role role, String token, GoogleIdTokenVerifier verifier) throws GeneralSecurityException, IOException, Exception {
         GoogleIdToken idToken = verifier.verify(token);
         if (null != idToken) {
             GoogleIdToken.Payload payload = idToken.getPayload();

@@ -33,8 +33,10 @@ public class LoginController {
     }
 
     @PostMapping(path = "/login/google")
-    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestBody(required = false) Role role) {
-//        log.info("Herererer {}", auth);
+    public ResponseEntity<ResponseModel> loginWithGoogle(@RequestHeader(value = "Authorization") String auth, @RequestHeader(required = false, value = "Role") Role role) {
+        if (auth == null){
+            log.info("Header {} {}", auth,role);
+        }
         String token = loginService.loginWithGoogleService(auth, role);
         return successResponseHandler.handleSuccessResponseEntity("User logged in successfully", HttpStatus.OK, Optional.of(token));
     }

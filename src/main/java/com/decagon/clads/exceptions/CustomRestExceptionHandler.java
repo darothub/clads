@@ -19,6 +19,7 @@ import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -153,13 +154,23 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUnknownHostException(UnknownHostException ex) {
         return errorHandlerController(ex, INTERNAL_SERVER_ERROR);
     }
-
+    @ExceptionHandler({MissingRequestHeaderException.class})
+    public ResponseEntity<Object> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
+        return errorHandlerController(ex, BAD_REQUEST);
+    }
 
     @ExceptionHandler(TransactionSystemException.class)
     public ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex) {
         getConstraintValidationErrors(ex);
         return buildResponseEntity(error);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        getConstraintValidationErrors(ex);
+        return buildResponseEntity(error);
+    }
+
 
     private ResponseEntity<Object> buildResponseEntity(ErrorResponse error) {
         return new ResponseEntity<>(error, HttpStatus.valueOf(error.getStatus()));
@@ -179,6 +190,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         getValidationErrors(ex, error);
         return error;
     }
+    private ErrorResponse getConstraintValidationErrors(ConstraintViolationException ex) {
+        getValidationErrors(ex, error);
+        return error;
+    }
 
     private void getValidationErrors(TransactionSystemException ex, ErrorResponse error) {
         error.setStatus(BAD_REQUEST.value());
@@ -192,6 +207,16 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         error.setPayload(errors);
     }
 
+    private void getValidationErrors(ConstraintViolationException ex, ErrorResponse error) {
+        error.setStatus(BAD_REQUEST.value());
+        error.setMessage(BAD_REQUEST.toString());
+        Map<String, String> errors = new HashMap<>();
+        assert ex != null;
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errors.put(violation.getPropertyPath().toString(), violation.getMessage());
+        }
+        error.setPayload(errors);
+    }
 
     private ResponseEntity<Object> errorHandlerController(Exception ex, HttpStatus status) {
         error.setMessage(status.toString());

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ArtisanId implements Serializable {
+public class JointEmailAndId implements Serializable {
     private Long id;
     private String email;
 }
