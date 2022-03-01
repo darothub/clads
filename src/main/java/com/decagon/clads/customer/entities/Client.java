@@ -48,7 +48,6 @@ public class Client implements UserDetails{
     @NotNull
     @NotBlank
     private String lastName;
-    @Pattern(regexp = ConstantUtils.PHONE_NUMBER_PATTERN, message = "Invalid phone number")
     private String phoneNumber;
     @Id
     @NotBlank
