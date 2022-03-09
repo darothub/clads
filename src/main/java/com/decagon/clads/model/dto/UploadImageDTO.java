@@ -1,5 +1,6 @@
 package com.decagon.clads.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @Component
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UploadImageDTO {
     private String fileId;
     private String fileType;
